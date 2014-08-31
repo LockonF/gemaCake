@@ -1,0 +1,50 @@
+{% macro crearTexto() %}
+    <p>lalalala</p>
+{% endmacro %}
+
+
+
+
+
+{% macro createModal(clase, articulo)%}
+
+
+<div class="modal fade" id="modal-preguntar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar {{ clase }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Deseas eliminar {{ articulo }}  {{ clase }} <span class="span-eliminar-elemento"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger funcion-eliminar"">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal2 -->
+
+<div class="modal fade" id="modal-confirmar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ clase }} eliminad@ exitosamente</h4>
+            </div>
+            <div class="modal-body">
+                <p>Operación realizada correctamente</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endmacro %}

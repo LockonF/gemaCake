@@ -1,0 +1,49 @@
+{% import 'Layouts/layout-modal.twig' as modals %}
+
+<div class='ver-usuario' class='col-md-12'>
+{% if usuarios%}
+
+	<table class='table table-hover table-striped'>
+		<tr>
+			<th>Usuario</th>
+			<th>Rol</th>
+			<th>Nombre Completo</th>
+			<th>Email</th>
+			<th></th>
+		</tr>
+		{% for usuario in usuarios%}
+		<tr>
+			<td>{{usuario.User.username}}</td>
+			<td>{{usuario.User.role}}</td>
+			<td>{{usuario.User.password}}</td>
+			<td>{{usuario.User.email}}</td>
+			<td>
+				<button class='btn btn-md btn-primary' onclick="$('.ver-usuario').load('Users/modificar',{'id':'{{usuario.User.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
+				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{usuario.User.id }}','{{ usuario.User.username }}','Users')">
+					<span class='glyphicon glyphicon-remove'></span>
+				</button>
+			</td>
+		</tr>
+
+
+        {% endfor %}
+	</table>
+
+
+
+{% else %}
+<div class='col-md-12 text-center'>
+	<p class='lead'>Lo sentimos, no hay registros.</p>
+</div>
+{% endif %}
+</div>
+
+{{ modals.createModal('Usuario','el') }}
+
+
+
+{% block scripts %}
+    {{html.script('management')}}
+{% endblock %}
+
+

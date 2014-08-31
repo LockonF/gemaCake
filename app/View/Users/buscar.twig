@@ -1,0 +1,23 @@
+<div class='well col-md-12 well-lg'>
+	<h3>Buscar</h3>
+	<form id="buscar-usuario">
+		<div class='col-md-8'>
+			<div class="input-group">
+				<input type="text" class="form-control" name="fieldBusqueda">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" onclick="$('#resultados-busqueda').load('Users/resultado', $('#buscar-usuario').serializeArray() )"><span class="glyphicon glyphicon-search"></span></button>
+
+				</span>
+			</div>
+		</div>
+
+	</form>
+	<div class='col-md-12'>
+		<p>Eventualmente aqui irán algunas opciones de búsqueda</p>
+	</div>
+</div>
+
+<div id='resultados-busqueda' class='col-md-12'>
+</div>
+
+

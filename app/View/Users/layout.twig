@@ -1,0 +1,37 @@
+
+{% block contenido %}
+<div class='container'>
+	<ul class='nav nav-tabs'>
+		<li class='active'>
+			<a href="#usuarios-buscar" role='tab' data-toggle='tab'>
+				Buscar un usuario
+			</a>
+		</li>
+		<li>
+			<a href="#usuarios-todos" role='tab' data-toggle='tab' onclick='$("#usuarios-todos").load("Users/ver")'>
+				Ver todos los usuarios
+			</a>
+		</li>
+		<li>
+			<a href="#usuarios-crear" role='tab' data-toggle='tab'>
+				Crear un Usuario	
+			</a>
+		</li>
+
+	</ul>
+
+	<div class='tab-content' style='padding-top:1.5em'>
+		<div id="usuarios-buscar" class='tab-pane fade in active'>
+			{% include "Users/buscar.twig"%}
+		</div>
+		<div id="usuarios-todos" class='tab-pane fade'>
+			<!-- esta se llena de forma asíncrona con /async/usuarios/todos -->
+		</div>
+		<div id="usuarios-crear" class='tab-pane fade'>
+
+			{% include "Users/modificar.twig" %}
+		</div>
+		
+	</div>
+</div>
+{% endblock %}

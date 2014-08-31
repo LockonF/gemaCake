@@ -1,0 +1,44 @@
+{% extends "layout-main.twig" %}
+
+{% block contenido %}
+    <header>
+        <div class='col-xs-12 col-md-4 text-center'><img src="img/gemlogo.png" class='gemlogo'></div>
+        <div class='col-xs-12 col-md-4'></div>
+        <div class='col-xs-12 col-md-4 text-center'>
+            <h2>{{usuario_activo.nombre}} <small>{{usuario_activo.rol}}</small></h2>
+            <button class='btn btn-md btn-primary'>Preferencias</button>
+            <button class='btn btn-md btn-danger'>Cerrar Sesión</button>
+
+        </div>
+    </header>
+    <nav class='container'>
+        <ul class='nav nav-pills nav-justified'>
+            {% block navbar_admin_g %}
+            {% endblock %}
+            <li class="active"><a href="#preguntas" role='tab' data-toggle='tab'>Preguntas</a></li>
+            <li><a href="#temas" role='tab' data-toggle='tab'>Temas</a></li>
+            <li><a href="#estadisticas" role='tab' data-toggle='tab'>Estadisticas</a></li>
+        </ul>
+    </nav>
+    <section class='container' style='padding-top:2em'>
+        <div class='tab-content'>
+            {% block tabs_admin_g %}
+            {% endblock %}
+            <div class='tab-pane fade in active' id="preguntas">
+            </div>
+            <div class='tab-pane fade' id="temas">
+            </div>
+            <div class='tab-pane fade' id='estadisticas'>
+
+            </div>
+        </div>
+
+    </section>
+    {% block contenido_admin %}
+
+    {% endblock %}
+
+
+
+{% endblock %}
+

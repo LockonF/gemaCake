@@ -1,0 +1,40 @@
+{% import "Layouts/forms.tpl" as forms %}
+
+
+{% block header %}
+    <h1> Magia arcana</h1>
+{% endblock %}
+
+{% block magia%}
+<table class="table">
+<thead>
+    <tr>
+        <td>Id</td>
+        <td>Titulo</td>
+        <td>Cuerpo</td>
+    </tr>
+</thead>
+{% for i in posts %}
+<tr>
+<td>{{i.Post.id}}</td>
+<td>{{i.Post.title}}</td>
+<td>{{i.Post.body }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+
+
+    {% block forma %}
+        <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Titulo" id="Title">
+            <input type="text" class="form-control" placeholder="Cuerpo" id="Body">
+
+        </div>
+        <button type="button" class="btn btn-default" id="Submit">Submit</button>
+        </form>
+    {% endblock  %}
+
+{% endblock %}

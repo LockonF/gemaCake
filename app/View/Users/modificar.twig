@@ -1,0 +1,97 @@
+<form class="form-horizontal" id="form-create-user">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldUsuario">Usuario</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="fieldUsuario" type="text" placeholder="Usuario..." class="form-control input-md" required="" value="{{usuario[0].User.username}}">
+
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldPassword">Contraseña</label>
+            <div class="col-md-4">
+                <input id="fieldPassword" name="fieldPassword" type="password" placeholder="Contraseña..." class="form-control input-md" required="" value="{{usuario[0].User.password}}">
+
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldPasswordConfirm">Confirmación de Contraseña</label>
+            <div class="col-md-4">
+                <input id="fieldPasswordConfirm" name="fieldPasswordConfirm" type="password" placeholder="Contraseña..." class="form-control input-md" required="" value="{{usuario[0].User.password}}">
+                <span class="help-block">deben ser idénticas</span>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldRol">Rol de Usuario</label>
+            <div class="col-md-4">
+                <select id="fieldRol" name="fieldRol" class="form-control" value="{{usuario.rol}}">
+                    <option value="1">Administrador</option>
+                    <option value="2">Profesor</option>
+                    <option value="3">Alumno</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
+            <div class="col-md-4">
+                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{usuario[0].Profile.nombre}}'>
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldPaterno">Apellido Paterno</label>
+            <div class="col-md-4">
+                <input id="fieldPaterno" name="fieldPaterno" type="text" placeholder="Apellido Paterno..." class="form-control input-md" value='{{usuario[0].Profile.apaterno}}'>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldMaterno">Apellido Materno</label>
+            <div class="col-md-4">
+                <input id="fieldMaterno" name="fieldMaterno" type="text" placeholder="Apellido Materno..." class="form-control input-md" required="" value='{{usuario[0].Profile.amaterno}}'>
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldEmail">Correo Electrónico</label>
+            <div class="col-md-4">
+                <input id="fieldEmail" name="fieldEmail" type="text" placeholder="email" class="form-control input-md" required="" value='{{usuario[0].User.email}}'>
+
+            </div>
+        </div>
+
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                {% if usuario[0] != null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success usuario-modificar" role="button">Guardar Cambios</button>
+
+
+                {% else %}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success usuario-crear" role="button" >Guardar Cambios</button>
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% block scripts %}
+    {{html.script('management')  }}
+{% endblock %}

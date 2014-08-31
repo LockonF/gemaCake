@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+    {{ html.charset() }}
+    <title>{{ 'CakePHP: the rapid development php framework'|trans }}: {{ title_for_layout }}</title>
+    {{ html.meta('icon') }}
+    {{ html.css('bootstrap.min') }}
+    {{ html.script("jquery") }}
+    {{ html.script('bootstrap')}}
+    {{ html.script('ejemplo') }}
+
+
+</head>
+<body>
+<div id="container">
+    <div id="header">
+        {% block header %}
+        {% endblock  %}
+    </div>
+    <div id="content">
+        {%  block magia %}
+        {% endblock %}
+
+        {{ session.flash() }}
+        {{ content_for_layout }}
+    </div>
+    <div id="footer">
+        {{
+        html.image('cake.power.gif', {
+        'alt': 'Powered by CakePHP'|trans,
+        'url': 'http://cakephp.org'
+        })
+        }}
+    </div>
+</div>
+</body>
+</html>

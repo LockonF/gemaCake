@@ -1,0 +1,18 @@
+{% extends "Layouts/layout-admin-g.twig" %}
+
+
+{% block navbar_admin_g %}
+<li><a href="#usuarios" role='tab' data-toggle='tab'>Usuarios</a></li>
+<li><a href="#materias" role='tab' data-toggle='tab'>Materias</a></li>
+{% endblock %}
+
+
+{% block tabs_admin_g %}
+ <div class='tab-pane fade' id="materias"></div>
+
+ <div class='tab-pane fade' id="usuarios">
+{% include "Users/layout.twig" %}
+</div>
+
+{% endblock %}
+
