@@ -9,7 +9,7 @@
 class AdministratorsController extends AppController{
 
     public function index(){
-            $this->layout= '';
+            $this->layout= 'layout-main';
     }
 
 } 
