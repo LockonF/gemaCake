@@ -1,3 +1,13 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
 <form class="form-horizontal" id="form-create-user">
     <fieldset>
 
@@ -81,17 +91,19 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="btn-enviar"></label>
             <div class="col-md-4">
-                {% if usuario[0] != null%}
-                <button id="btn-enviar" name="btn-enviar" class="btn btn-success usuario-modificar" role="button">Guardar Cambios</button>
+                {% if usuario[0] == null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','createUser','form-create-user')" >Guardar Cambios</button>
 
 
                 {% else %}
-                <button id="btn-enviar" name="btn-enviar" class="btn btn-success usuario-crear" role="button" >Guardar Cambios</button>
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','executeMod','form-create-user')">Guardar Cambios</button>
                 {% endif %}
             </div>
         </div>
     </fieldset>
 </form>
+
+
 {% block scripts %}
     {{html.script('management')  }}
 {% endblock %}

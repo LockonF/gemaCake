@@ -40,11 +40,19 @@ class AppController extends Controller {
     );
 
 	public $components = array(
-	    'DebugKit.Toolbar','RequestHandler'
+  /*      'Acl',
+        'Auth' => array(
+            'authorize' => array(
+                'Actions' => array('actionPath' => 'controllers')
+            )
+        ),*/
+        'Session','DebugKit.Toolbar','RequestHandler'
 	);
 
     public $ext = '.twig';
     public $viewClass = 'TwigView.Twig';
+
+
 
 
 }

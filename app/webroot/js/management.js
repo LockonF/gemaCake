@@ -3,32 +3,7 @@
  */
 
 $(document).ready(function(){
-$('#btn-enviar').click(function(event){
-    event.preventDefault();
 
-    if($('#btn-enviar').hasClass("usuario-modificar"))
-    {
-
-        $.post('Users/executeMod',
-            $('#form-create-user').serialize(),
-            function(data){
-                alert(data);
-            }
-
-        );
-    }
-    else
-    {
-        $.post('Users/createUser',
-            $('#form-create-user').serialize(),
-            function(data){
-                alert(data);
-            }
-
-        );
-    }
-
-});
 
 $('.delete-element').click(function(event)
 {
@@ -39,7 +14,39 @@ $('.delete-element').click(function(event)
 
 });
 
-function deleteElement(id,name,clase)
+    function createOrModElement(clase,metodo,forma)
+    {
+        $.post(clase+'/'+metodo,
+            $('#'+forma).serialize(),
+            function(data){
+                if(data=='success')
+                {
+                    var  alert = $(".alert-success");
+                    alert.addClass('in');
+                    alert.toggle();
+                }
+                else
+                {
+                    var alert = $(".alert-danger");
+                    alert.addClass('in');
+                    alert.toggle();
+
+                }
+                window.setTimeout(function() {
+                    alert.removeClass('in');
+                    alert.toggle();
+                }, 2500);
+
+
+            }
+
+        );
+        return false;
+    }
+
+
+
+function deleteElement(id,name,clase,div)
 {
     $('.span-eliminar-elemento').html(name);
     $('.funcion-eliminar').click(function(){
@@ -48,7 +55,7 @@ function deleteElement(id,name,clase)
         {
             $("#modal-preguntar").modal('hide');
             $("#modal-confirmar").modal('show');
-            $(".ver-usuario").empty();
+            $(".ver-"+div).empty();
         });
     });
 }

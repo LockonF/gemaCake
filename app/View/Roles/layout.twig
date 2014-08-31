@@ -1,0 +1,30 @@
+
+{% block contenido %}
+    <div class='container'>
+        <ul class='nav nav-tabs'>
+            <li class="active">
+                <a href="#roles-crear" role='tab' data-toggle='tab'>
+                    Crear un Rol
+                </a>
+            </li>
+
+            <li>
+                <a href="#roles-todos" role='tab' data-toggle='tab' onclick='$("#roles-todos").load("Roles/ver")'>
+                    Ver todos los roles
+                </a>
+            </li>
+
+        </ul>
+
+        <div class='tab-content' style='padding-top:1.5em'>
+            <div id="roles-todos" class='tab-pane fade'>
+                <!-- esta se llena de forma asíncrona con /async/roles/todos -->
+            </div>
+            <div id="roles-crear" class='tab-pane fade'>
+
+                {% include "Roles/modificar.twig" %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

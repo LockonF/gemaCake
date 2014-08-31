@@ -8,10 +8,18 @@
 
 class UsersController extends AppController{
 
+    /*Acciones permitidas sin la lista de acceso*/
+
+
+
+
+
     public function index()
     {
 
     }
+
+
 
     //Para renderear la vista de modificar
 
@@ -24,8 +32,8 @@ class UsersController extends AppController{
 
     public function eliminar()
     {
-        $this->User->delete($this->request->data['id']);
-        echo "Lol";
+        $this->Role->delete($this->request->data['id']);
+        echo 'success';
     }
 
 
@@ -38,7 +46,7 @@ class UsersController extends AppController{
         $user = $this->User->find('first',array('conditions'=>array('User.username'=>$this->request->data['fieldUsuario'])));
         $userData = array('id'=>$user['User']['id'],'username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
             'password-confirm'=>$this->request->data['fieldPasswordConfirm'],'email'=>$this->request->data['fieldEmail'],
-            'role'=>$this->request->data['fieldRol']);
+            'role_id'=>$this->request->data['fieldRol']);
         $this->User->create();
         if($this->User->save($userData))
         {
@@ -60,6 +68,7 @@ class UsersController extends AppController{
             echo  json_encode($errors);
         }
         $this->User->clear();
+        $this->set("usuarios",null);
 
     }
 
@@ -85,7 +94,7 @@ class UsersController extends AppController{
         {
             $userData = array('username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
             'password-confirm'=>$this->request->data['fieldPasswordConfirm'],'email'=>$this->request->data['fieldEmail'],
-            'role'=>$this->request->data['fieldRol']);
+            'role_id'=>$this->request->data['fieldRol']);
              $this->User->create();
             if($this->User->save($userData))
             {
@@ -105,6 +114,8 @@ class UsersController extends AppController{
                 echo  json_encode($errors);
             }
         }
+        $this->set("usuarios",null);
+
     }
 
 } 

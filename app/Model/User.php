@@ -5,6 +5,7 @@
  * Date: 8/29/14
  * Time: 21:12
  */
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 App::uses('AppModel', 'Model');
 
 
@@ -69,5 +70,16 @@ class User extends AppModel {
         }
         else return FALSE;
 
+    }
+
+    public function beforeSave($options = array())
+    {
+        if (isset($this->data[$this->alias]['password'])) {
+            $passwordHasher = new BlowfishPasswordHasher();
+            $this->data[$this->alias]['password'] = $passwordHasher->hash(
+                $this->data[$this->alias]['password']
+            );
+        }
+        return true;
     }
 } 

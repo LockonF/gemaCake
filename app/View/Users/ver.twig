@@ -19,7 +19,7 @@
 			<td>{{usuario.User.email}}</td>
 			<td>
 				<button class='btn btn-md btn-primary' onclick="$('.ver-usuario').load('Users/modificar',{'id':'{{usuario.User.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
-				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{usuario.User.id }}','{{ usuario.User.username }}','Users')">
+				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{usuario.User.id }}','{{ usuario.User.username }}','Users','usuario')">
 					<span class='glyphicon glyphicon-remove'></span>
 				</button>
 			</td>

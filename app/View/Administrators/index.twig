@@ -4,15 +4,19 @@
 {% block navbar_admin_g %}
 <li><a href="#usuarios" role='tab' data-toggle='tab'>Usuarios</a></li>
 <li><a href="#materias" role='tab' data-toggle='tab'>Materias</a></li>
+<li><a href="#roles" role='tab' data-toggle='tab'>Roles</a></li>
+
 {% endblock %}
 
 
 {% block tabs_admin_g %}
  <div class='tab-pane fade' id="materias"></div>
-
  <div class='tab-pane fade' id="usuarios">
-{% include "Users/layout.twig" %}
-</div>
+ {% include "Users/layout.twig" %}
+ </div>
+ <div class='tab-pane fade' id="roles">
+ {% include "Roles/layout.twig" %}
+ </div>
 
 {% endblock %}
 

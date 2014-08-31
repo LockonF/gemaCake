@@ -1,0 +1,42 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
+<form class="form-horizontal" id="form-create-role">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
+            <div class="col-md-4">
+                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{rol[0].Role.nombre}}'>
+
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                {% if rol[0] == null%}
+                    <button id="btn-enviar" name="btn-enviar" class="btn btn-success" role="button" type="button" onclick="createOrModElement('roles','createRole','form-create-role'); return false;">Guardar Cambios</button>
+
+
+                {% else %}
+                    <button id="btn-enviar" name="btn-enviar" class="btn btn-success" role="button" type="button" onclick="createOrModElement('roles','executeMod','form-create-role'); return false;">Guardar Cambios</button>
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+{% block scripts %}
+    {{html.script('management')  }}
+{% endblock %}
