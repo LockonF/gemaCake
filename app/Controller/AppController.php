@@ -50,7 +50,10 @@ class AppController extends Controller {
                     'password' => 'password'
             )
         ))
-        ),'Session','DebugKit.Toolbar','RequestHandler'
+
+        ),
+
+        'Session','DebugKit.Toolbar','RequestHandler'
 	);
 
     public $ext = '.twig';
@@ -71,6 +74,21 @@ class AppController extends Controller {
             'controller' => 'administrators',
             'action' => 'index'
         );
+        $this->Auth->authorize = array('Controller');
+
+    }
+
+/*
+ * Autorización para los admins
+ */
+
+    public function isAuthorized($user = null) {
+        if(isset($user['role_id']) &&  $user['role_id']==="1")
+        {
+            return true;
+        }
+
+        return false;
     }
 
 

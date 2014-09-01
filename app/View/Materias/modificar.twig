@@ -1,0 +1,51 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
+<form class="form-horizontal" id="form-create-materia">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
+            <div class="col-md-4">
+                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Materia.nombre}}'>
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldNumPreguntas">Numero de Preguntas</label>
+            <div class="col-md-4">
+                <input id="fieldNumPreguntas" name="fieldNumPreguntas" type="text" placeholder="Numero de Preguntas..." class="form-control input-md" value='{{Materia.numpreguntas}}'>
+            </div>
+        </div>
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                {% if Materia == null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('materias','createMateria','form-create-materia')" >Guardar Cambios</button>
+
+
+                {% else %}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('materias','executeMod','form-create-materia')">Guardar Cambios</button>
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+{% block scripts %}
+    {{html.script('management')  }}
+{% endblock %}

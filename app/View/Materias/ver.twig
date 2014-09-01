@@ -1,0 +1,47 @@
+{% import 'Layouts/layout-modal.twig' as modals %}
+
+<div class='ver-materia' class='col-md-12'>
+{% if materias%}
+
+	<table class='table table-hover table-striped'>
+		<tr>
+			<th>Id</th>
+			<th>Nombre</th>
+			<th>NumPreguntas</th>
+			<th></th>
+		</tr>
+		{% for materia in materias %}
+		<tr>
+			<td>{{materia.Materia.id}}</td>
+			<td>{{materia.Materia.nombre}}</td>
+			<td>{{materia.Materia.numpreguntas}}</td>
+			<td>
+				<button class='btn btn-md btn-primary' onclick="$('.ver-materia').load('Materias/modificar',{'id':'{{materia.Materia.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
+				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{materia.Materia.id }}','{{ materia.Materia.nombre}}','Materias','materia')">
+					<span class='glyphicon glyphicon-remove'></span>
+				</button>
+			</td>
+		</tr>
+
+
+        {% endfor %}
+	</table>
+
+
+
+{% else %}
+<div class='col-md-12 text-center'>
+	<p class='lead'>Lo sentimos, no hay registros.</p>
+</div>
+{% endif %}
+</div>
+
+{{ modals.createModal('Materia','la') }}
+
+
+
+{% block scripts %}
+    {{html.script('management')}}
+{% endblock %}
+
+

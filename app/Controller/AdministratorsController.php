@@ -12,14 +12,14 @@ class AdministratorsController extends AppController{
             $this->layout= 'layout-main';
     }
 
-    public function isAuthorized($user) {
-        // Admin can access every action
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
+    public function isAuthorized($user=null)
+    {
+        if(isset($user) && $user['role_id']!=1)
+            $this->redirect(array('controller' => 'users', 'action' => 'login'));
 
-        // Default deny
-        return $this->redirect(array('controller'=>'pages','action'=>'display'));
+        return parent::isAuthorized($user);
     }
+
+
 
 } 

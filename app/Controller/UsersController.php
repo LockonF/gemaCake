@@ -50,14 +50,15 @@ class UsersController extends AppController{
 
     public function modificar()
     {
-        $this->set('usuario', $this->User->find('all',array('conditions'=>array('User.id'=>$this->request->data['id']))));
-    }
+        $user=$this->User->find('first',array('contitions'=>array('User.id'=>$this->request->data['id'])));
+        $this->set($user);
+     }
 
     //Para renderear la vista de eliminar
 
     public function eliminar()
     {
-        $this->Role->delete($this->request->data['id']);
+        $this->User->delete($this->request->data['id']);
         echo 'success';
     }
 
@@ -68,6 +69,8 @@ class UsersController extends AppController{
     public function executeMod()
     {
         $this->autoRender=false;
+
+
         $user = $this->User->find('first',array('conditions'=>array('User.username'=>$this->request->data['fieldUsuario'])));
         $userData = array('id'=>$user['User']['id'],'username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
             'password-confirm'=>$this->request->data['fieldPasswordConfirm'],'email'=>$this->request->data['fieldEmail'],
@@ -93,7 +96,6 @@ class UsersController extends AppController{
             echo  json_encode($errors);
         }
         $this->User->clear();
-        $this->set("usuarios",null);
 
     }
 
@@ -139,8 +141,6 @@ class UsersController extends AppController{
                 echo  json_encode($errors);
             }
         }
-        $this->set("usuarios",null);
-
     }
 
 } 

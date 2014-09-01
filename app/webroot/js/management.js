@@ -19,6 +19,7 @@ $('.delete-element').click(function(event)
         $.post(clase+'/'+metodo,
             $('#'+forma).serialize(),
             function(data){
+                console.log("Result:"+data);
                 if(data=='success')
                 {
                     var  alert = $(".alert-success");
