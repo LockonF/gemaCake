@@ -3,6 +3,9 @@
 
 class RolesController extends AppController{
 
+    public function beforeFilter() {
+        $this->Auth->allow();
+    }
 
     public function add()
     {

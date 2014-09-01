@@ -11,6 +11,8 @@ App::uses('AppModel', 'Model');
 
 class User extends AppModel {
 
+    /*****Validaciones******/
+
     public $hasOne = array(
         'Profile'=>array(
             'foreignKey'=>'user_id'

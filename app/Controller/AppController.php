@@ -40,18 +40,38 @@ class AppController extends Controller {
     );
 
 	public $components = array(
-  /*      'Acl',
         'Auth' => array(
-            'authorize' => array(
-                'Actions' => array('actionPath' => 'controllers')
+            'authenticate' =>
+            array('Form' => array(
+                'passwordHasher'=>'Blowfish',
+                'userModel' => 'User',
+                    'fields' => array(
+                    'username' => 'username',
+                    'password' => 'password'
             )
-        ),*/
-        'Session','DebugKit.Toolbar','RequestHandler'
+        ))
+        ),'Session','DebugKit.Toolbar','RequestHandler'
 	);
 
     public $ext = '.twig';
     public $viewClass = 'TwigView.Twig';
 
+
+    public function beforeFilter() {
+        //Configure AuthComponent
+        $this->Auth->loginAction = array(
+            'controller' => 'users',
+            'action' => 'login'
+        );
+        $this->Auth->logoutRedirect= array(
+            'controller' => 'pages',
+            'action' => 'display'
+        );
+        $this->Auth->loginRedirect = array(
+            'controller' => 'administrators',
+            'action' => 'index'
+        );
+    }
 
 
 

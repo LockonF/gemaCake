@@ -8,4 +8,6 @@
 
 class Role extends AppModel{
 
+
+
 } 

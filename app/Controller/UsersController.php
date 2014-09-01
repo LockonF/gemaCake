@@ -5,19 +5,45 @@
  * Date: 8/29/14
  * Time: 21:23
  */
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
 class UsersController extends AppController{
 
-    /*Acciones permitidas sin la lista de acceso*/
 
-
-
-
-
-    public function index()
-    {
-
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow();
     }
+
+
+    public function login() {
+        $this->autoRender=false;
+        if ($this->request->is('post')) {
+            $this->request->data['User']=$this->User->create();
+            $this->request->data['User']['username']=$this->request->data['username'];
+            unset($this->request->data['username']);
+            $this->request->data['User']['password']=$this->request->data['password'];
+            unset($this->request->data['password']);
+
+            if ($this->Auth->login()) {
+                return $this->redirect($this->Auth->redirect());
+            }
+            $this->redirect(array('controller'=>'pages','action'=>'display'));
+        }
+    }
+
+    public function logout() {
+        $this->Auth->logoutRedirect= array('controller'=>'pages','action'=>'display');
+        return $this->redirect($this->Auth->logout());
+    }
+
+
+
+
+
+
+
+
 
 
 

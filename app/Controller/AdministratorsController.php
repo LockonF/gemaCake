@@ -7,6 +7,9 @@
  */
 
 class AdministratorsController extends AppController{
+    public function beforeFilter() {
+        $this->Auth->allow();
+    }
 
     public function index(){
             $this->layout= 'layout-main';

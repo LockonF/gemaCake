@@ -1,0 +1,162 @@
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="css/styles-index.css">
+{% endblock %}
+
+{% block contenido %}
+
+    <header class='container-fluid'>
+        <div class='col-md-4'>
+            <h2>
+                <img src="img/logo.png" class='logo-mini'>
+                GEMA
+            </h2>
+
+
+        </div>
+        <div class='col-md-8 col-xs-12'>
+
+            <nav class='pull-right'>
+                <ul class='nav nav-pills'>
+                    <li><a href="#inicio" >Inicio</a></li>
+                    <li><a href="#caracteristicas" >¿Qué es GEMA?</a></li>
+                    <li><a href="#registro" >Regístrate</a></li>
+
+                </ul>
+            </nav>
+
+            <div class='col-md-12'>
+                <div class='pull-right'>
+                    <form class="form-inline" name="login" role="form" action='Users/login' method='post' style='padding-top:1em'>
+                        <div class="form-group">
+                            <strong>Iniciar Sesión</strong>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter email">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Iniciar Sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section id='inicio' class='container-fluid container-bg'>
+
+    </section>
+    <section id='presentacion' class='container-fluid text-center container-bg'>
+        <h1>Evoluciona tu conocimiento.</h1>
+        <p class='lead'>GEMA te ayuda a mejorar adaptándose a tus fortalezas y debilidades.</p>
+        <a href="#registro" role='button' class='btn btn-lg btn-primary'> Comenzar ahora</a>
+    </section>
+    <section id='caracteristicas' class='container-fluid container-bg'>
+
+        <div class='container'>
+            <div class='col-md-4 text-center'>
+                <img src="img/portada/1.png" class='img-portada'>
+                <h2>Trabaja a tu Ritmo</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at sagittis libero, et pretium nisi. Curabitur ac elementum arcu, vitae dictum tortor. </p>
+            </div>
+            <div class='col-md-4 text-center'>
+                <img src="img/portada/2.png" class='img-portada'>
+                <h2>Sigue tus progresos</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at sagittis libero, et pretium nisi. Curabitur ac elementum arcu, vitae dictum tortor. </p>
+            </div>
+            <div class='col-md-4 text-center'>
+                <img src="img/portada/3.png" class='img-portada'>
+                <h2>Úsalo donde sea</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at sagittis libero, et pretium nisi. Curabitur ac elementum arcu, vitae dictum tortor.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id='sistema' class='container-fluid'>
+        <div class='col-md-12 card'>
+            <div class='col-md-4 text-center card-img'>
+                <img src="img/portada/uso1.png" class='img-responsive'>
+            </div>
+            <div class='col-md-6'>
+                <h1>Realiza evaluaciones reales.</h1>
+                <p>Y ahi va un pequeñísimo ejemplo.</p>
+                <p></p>
+
+            </div>
+        </div>
+
+        <div class='col-md-12 card'>
+            <div class='col-md-4 text-center card-img'>
+                <img src="img/portada/uso1.png" class='img-responsive'>
+            </div>
+            <div class='col-md-6'>
+                <h1>Preguntas y contenido confiable.</h1>
+                <p>¿Por qué es confiable? La respuesta, aquí</p>
+            </div>
+        </div>
+
+
+
+        </div>
+    </section>
+    <section id='registro' class='container-fluid'>
+        <div class='container'>
+            <div class='col-md-6 text-center'>
+                <h1>Regístrate</h1>
+                <p class='lead'>Otórganos tus datos personales. ¿Estás listo? Pues comencemos.</p>
+                <a href="registro" class='btn btn-block btn-primary btn-lg'>¡Regístrate ahora!</a>
+            </div>
+            <div class='col-md-6 text-center' id='iniciar-sesion'>
+                <h1>Iniciar Sesión</h1>
+                <p class='lead'>¿Ya tienes una cuenta en GEMA? Ingresa aquí.</p>
+                <form class="form-horizontal" action='login' method='post'>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="fieldUsuario">
+                            <p class='lead'><strong>Usuario</strong></p></label>
+                        <div class="col-md-8">
+                            <input id="fieldUsuario" name="fieldUsuario" type="text" placeholder="Escribe tu usuario..." class="form-control input-lg" required="">
+
+                        </div>
+                    </div>
+
+                    <!-- Password input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="fieldPassword">
+                            <p class='lead'><strong>Contraseña</strong></p></label>
+                        <div class="col-md-8">
+                            <input id="fieldPassword" name="fieldPassword" type="password" placeholder="Escribe tu contraseña..." class="form-control input-lg" required="">
+
+                        </div>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="btn-signup-lg"></label>
+                        <div class="col-md-4">
+                            <button id="btn-signup-lg" name="btn-signup-lg" class="btn btn-success btn-lg">Iniciar Sesión</button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </section>
+    <footer class='container-fluid'>
+        <div class='col-md-6'>
+            logo de la escom
+        </div>
+        <div class='col-md-6'>
+            Instituto Politécnico Nacional, 2014
+        </div>
+    </footer>
+
+
+
+{% endblock %}

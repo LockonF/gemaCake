@@ -30,6 +30,13 @@ App::uses('AppController', 'Controller');
  */
 class PagesController extends AppController {
 
+    public function beforeFilter()
+    {
+        $this->layout='layout-main';
+        $this->Auth->allow();
+
+    }
+
 /**
  * This controller does not use a model
  *
