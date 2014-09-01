@@ -1,0 +1,81 @@
+body{
+	background-color:#333333;
+}
+
+
+p{
+	font-size:12pt;
+}
+header{
+	background-color:#6082B6;;
+	padding:1em 0em;
+	color:white;
+}
+
+header a{
+	color:white;
+}
+
+nav{
+	font-size:1.2em;
+}
+.container-bg{
+	background-color:#eeeeee
+}
+
+#inicio{
+	height:44em;
+	background-image:url('../img/portada.jpg');
+	background-size:cover;
+	background-attachment: fixed;
+	background-position: center;
+
+}
+
+#presentacion{
+	background-color:#333333;
+	color:#eeeeee;
+	padding:2em;
+}
+
+#caracteristicas p{
+	font-size: 1.2em
+}
+
+#presentacion h1{
+	font-size: 5em;
+}
+
+
+#caracteristicas{
+	padding:6em;
+}
+
+#caracteristicas h2{
+	font-weight:bold;
+}
+
+.img-portada{
+	transition:all 0.5s ease;
+}
+
+#caracteristicas .img-portada:hover{
+	-webkit-transform:scale(1.2);
+}
+
+#sistema{
+	padding:2em;
+	background-color: #B7CC14;
+}
+
+#registro{
+	background-color: #123456;
+	color:white;
+	padding:2em 0em;
+}
+
+#registro h1{
+	color:gold;
+}
+
+
