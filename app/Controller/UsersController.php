@@ -17,7 +17,7 @@ class UsersController extends AppController{
 
 
     public function login() {
-        $this->autoRender=false;
+        $this->layout='layout-main';
         if ($this->request->is('post')) {
             $this->request->data['User']=$this->User->create();
             $this->request->data['User']['username']=$this->request->data['username'];
@@ -33,7 +33,6 @@ class UsersController extends AppController{
     }
 
     public function logout() {
-        $this->Auth->logoutRedirect= array('controller'=>'pages','action'=>'display');
         return $this->redirect($this->Auth->logout());
     }
 
