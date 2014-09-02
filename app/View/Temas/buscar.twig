@@ -1,11 +1,11 @@
 <div class='well col-md-12 well-lg'>
 	<h3>Buscar</h3>
-	<form id="buscar-usuario">
+	<form id="buscar-tema">
 		<div class='col-md-8'>
 			<div class="input-group">
 				<input type="text" class="form-control" name="fieldBusqueda">
 				<span class="input-group-btn">
-					<button class="btn btn-primary" type="button" onclick="$('#resultados-busqueda-usuario').load('Users/resultado', $('#buscar-usuario').serializeArray() )"><span class="glyphicon glyphicon-search"></span></button>
+					<button class="btn btn-primary" type="button" onclick="$('#resultados-busqueda-temas').load('Temas/resultado', $('#buscar-tema').serializeArray() )"><span class="glyphicon glyphicon-search"></span></button>
 
 				</span>
 			</div>
@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-<div id='resultados-busqueda-usuario' class='col-md-12'>
+<div id='resultados-busqueda-temas' class='col-md-12'>
 </div>
 
 

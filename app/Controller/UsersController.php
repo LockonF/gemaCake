@@ -104,7 +104,9 @@ class UsersController extends AppController{
 
     public function resultado()
     {
-        $this->set('usuarios', $this->User->find('all',array('conditions'=>array('User.username LIKE'=>"%".$this->request->data['fieldBusqueda']."%"))));
+        $this->set("usuarios",null);
+        $users = $this->User->find('all',array('conditions'=>array('User.username LIKE'=>"%".$this->request->data['fieldBusqueda']."%")));
+        $this->set('usuarios', $users);
     }
 
     //Ver los usuarios

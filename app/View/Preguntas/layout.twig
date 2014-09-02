@@ -1,0 +1,34 @@
+
+{% block contenido %}
+<div class='container'>
+	<ul class='nav nav-tabs'>
+		<li class='active'>
+			<a href="#preguntas-buscar" role='tab' data-toggle='tab'>
+				Buscar una pregunta
+			</a>
+		</li>
+		<li>
+			<a href="#preguntas-todos" role='tab' data-toggle='tab' onclick='$("#preguntas-todos").load("Preguntas/ver")'>
+				Ver todas las preguntas
+			</a>
+		</li>
+		<li>
+			<a href="#preguntas-crear" role='tab' data-toggle='tab'>
+				Crear una  pregunta
+			</a>
+		</li>
+
+	</ul>
+
+	<div class='tab-content' style='padding-top:1.5em'>
+		<div id="preguntas-buscar" class='tab-pane fade in active'>
+		</div>
+		<div id="preguntas-todos" class='tab-pane fade'>
+			<!-- esta se llena de forma asíncrona con /async/preguntas/todos -->
+		</div>
+		<div id="preguntas-crear" class='tab-pane fade'>
+		</div>
+		
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
+<form class="form-horizontal" id="form-create-user">
+    <fieldset>
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
+            <div class="col-md-4">
+                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Profile.nombre}}'>
+
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fieldRol">Materia</label>
+            <div class="col-md-4">
+                <select id="fieldRol" name="fieldRol" class="form-control" value="{{User.role_id}}">
+                    {% for materia in materias %}
+                    <option value={{ materia.Materia.id }}>{{ materia.Materia.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                {% if User == null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','createUser','form-create-user')" >Guardar Cambios</button>
+
+
+                {% else %}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','executeMod','form-create-user')">Guardar Cambios</button>
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+{% block scripts %}
+    {{html.script('management')  }}
+{% endblock %}

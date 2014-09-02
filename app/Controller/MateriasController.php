@@ -9,11 +9,26 @@
 class MateriasController extends AppController {
 
 
+
+    public function resultado()
+    {
+        $materias = $this->Materia->find('all',array('conditions'=>array('Materia.nombre LIKE'=>"%".$this->request->data['fieldBusqueda']."%")));
+        $this->set('materias', $materias);
+    }
+
+
+
+    //Solo para la vista de modiicar
+
     public function modificar()
     {
         $materia=$this->Materia->find('first',array('contitions'=>array('Materia.id'=>$this->request->data['id'])));
         $this->set($materia);
     }
+
+
+
+
 
     public function createMateria()
     {
@@ -49,7 +64,7 @@ class MateriasController extends AppController {
 
     public function eliminar()
     {
-        $this->autoRender=$false;
+        $this->autoRender=false;
         $this->Materia->delete($this->request->data['id']);
         echo 'success';
     }

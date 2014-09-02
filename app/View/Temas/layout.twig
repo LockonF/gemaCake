@@ -1,0 +1,35 @@
+{% block contenido %}
+<div class='container'>
+	<ul class='nav nav-tabs'>
+		<li class='active'>
+			<a href="#temas-buscar" role='tab' data-toggle='tab'>
+				Buscar un tema
+			</a>
+		</li>
+		<li>
+			<a href="#temas-todos" role='tab' data-toggle='tab' onclick='$("#temas-todos").load("Temas/ver")'>
+				Ver todos los temas
+			</a>
+		</li>
+		<li>
+			<a href="#temas-crear" role='tab' data-toggle='tab' onclick='$("#temas-crear").load("Temas/modificar")'>
+				Crear un tema	
+			</a>
+		</li>
+
+	</ul>
+
+	<div class='tab-content' style='padding-top:1.5em'>
+		<div id="temas-buscar" class='tab-pane fade in active'>
+            {% include "Temas/buscar.twig" %}
+		</div>
+		<div id="temas-todos" class='tab-pane fade'>
+			<!-- esta se llena de forma asíncrona con /async/temas/todos -->
+		</div>
+		<div id="temas-crear" class='tab-pane fade'>
+
+		</div>
+		
+	</div>
+</div>
+{% endblock %}
