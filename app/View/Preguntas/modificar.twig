@@ -1,0 +1,127 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
+<form class="form-horizontal" id="form-create-pregunta">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="oracion">Usuario</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="oracion" type="text" placeholder="Oracion..." class="form-control input-md" required="" value="{{Pregunta.oracion}}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opc1">Opcion 1</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="opc1" type="text" placeholder="Opcion 1..." class="form-control input-md" required="" value="{{Pregunta.opc1}}">
+
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opc2">Opcion 2</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="opc2" type="text" placeholder="Opcion 2..." class="form-control input-md" required="" value="{{Pregunta.opc2}}">
+
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opc3">Opcion 3</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="opc3" type="text" placeholder="Opcion 3..." class="form-control input-md" required="" value="{{Pregunta.opc3}}">
+
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opc4">Opcion 4</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="opc4" type="text" placeholder="Opcion 4..." class="form-control input-md" required="" value="{{Pregunta.opc4}}">
+
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="just">Justificacion</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="just" type="text" placeholder="Justificacion..." class="form-control input-md" required="" value="{{Pregunta.just}}">
+
+            </div>
+        </div>
+
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="id_tema">Tema</label>
+            <div class="col-md-4">
+                <select id="id_tema" name="id_tema" class="form-control" value="{{Pregunta.id_tema}}">
+                    {% for tema in temas%}
+                        <option value={{ tema.Tema.id }}>{{ tema.Tema.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opcc">Opcion Correcta</label>
+            <div class="col-md-4">
+                <select id="opcc" name="opcc" class="form-control" value="{{Pregunta.opcc}}">
+                    {% for opc in 1..4%}
+                        <option value={{ opc }}>Opcion {{ opc}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="recurso">Recurso</label>
+            <div class="col-md-4">
+                <input id="recurso" name="recurso" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Pregunta.recurso}}'>
+
+            </div>
+        </div>
+
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                {% if User == null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('preguntas','createPregunta','form-create-pregunta')" >Guardar Cambios</button>
+
+
+                {% else %}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('preguntas','executeMod','form-create-pregunta')">Guardar Cambios</button>
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+{% block scripts %}
+    {{html.script('management')  }}
+{% endblock %}

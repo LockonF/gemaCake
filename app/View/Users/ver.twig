@@ -13,7 +13,7 @@
 		{% for usuario in usuarios%}
 		<tr>
 			<td>{{usuario.User.username}}</td>
-			<td>{{usuario.User.role}}</td>
+			<td>{{usuario.Role.name}}</td>
 			<td>{{usuario.User.password}}</td>
 			<td>{{usuario.User.email}}</td>
 			<td>

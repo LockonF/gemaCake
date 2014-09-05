@@ -13,5 +13,10 @@ class Tema extends AppModel{
             "className"=>"Materia",
             "foreignKey"=>"id_materia"
         ));
-
+    public $hasMany = array('Pregunta'=>
+        array(
+            "className"=>'Pregunta',
+            'foreignKey'=>'id_tema'
+        )
+    );
 } 

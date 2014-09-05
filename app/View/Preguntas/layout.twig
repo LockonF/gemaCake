@@ -13,7 +13,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="#preguntas-crear" role='tab' data-toggle='tab'>
+			<a href="#preguntas-crear" role='tab' data-toggle='tab' onclick='$("#preguntas-crear").load("Preguntas/modificar")'>
 				Crear una  pregunta
 			</a>
 		</li>
@@ -22,6 +22,7 @@
 
 	<div class='tab-content' style='padding-top:1.5em'>
 		<div id="preguntas-buscar" class='tab-pane fade in active'>
+            {% include "Preguntas/buscar.twig" %}
 		</div>
 		<div id="preguntas-todos" class='tab-pane fade'>
 			<!-- esta se llena de forma asíncrona con /async/preguntas/todos -->

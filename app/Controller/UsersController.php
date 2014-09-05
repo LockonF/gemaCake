@@ -50,7 +50,9 @@ class UsersController extends AppController{
 
     public function modificar()
     {
-        $user=$this->User->find('first',array('contitions'=>array('User.id'=>$this->request->data['id'])));
+        $this->set("users",null);
+        $user = $this->User->find('first', array(
+            'conditions' => array('User.id' => $this->request->data['id'])));
         $this->set($user);
      }
 
@@ -69,8 +71,6 @@ class UsersController extends AppController{
     public function executeMod()
     {
         $this->autoRender=false;
-
-
         $user = $this->User->find('first',array('conditions'=>array('User.username'=>$this->request->data['fieldUsuario'])));
         $userData = array('id'=>$user['User']['id'],'username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
             'password-confirm'=>$this->request->data['fieldPasswordConfirm'],'email'=>$this->request->data['fieldEmail'],
@@ -113,7 +113,8 @@ class UsersController extends AppController{
 
     public function ver()
     {
-        $this->set('usuarios', $this->User->find('all'));
+        $users = $this->User->find('all');
+        $this->set('usuarios', $users);
     }
 
     public function createUser()

@@ -6,10 +6,11 @@
  * Time: 08:56
  */
 
-namespace Datasource;
 
 
 class Pregunta extends AppModel{
+    public $useTable = 'preguntas';
+
     public $belongsTo = array(
         'Tema'=>array(
             'classname'=>'Tema',
