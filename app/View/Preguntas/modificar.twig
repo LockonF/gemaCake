@@ -13,28 +13,18 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="oracion">Usuario</label>
+            <label class="col-md-4 control-label" for="oracion">Oración</label>
             <div class="col-md-4">
-                <input id="fieldUsuario" name="oracion" type="text" placeholder="Oracion..." class="form-control input-md" required="" value="{{Pregunta.oracion}}">
+                <input id="fieldUsuario" name="data[Pregunta][oracion]" type="text" placeholder="Oracion..." class="form-control input-md" required="" value="{{Pregunta.oracion}}">
 
             </div>
         </div>
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="opc1">Opcion 1</label>
+            <label class="col-md-4 control-label" for="opc1">Opción 1</label>
             <div class="col-md-4">
-                <input id="fieldUsuario" name="opc1" type="text" placeholder="Opcion 1..." class="form-control input-md" required="" value="{{Pregunta.opc1}}">
-
-            </div>
-        </div>
-
-
-        <!-- Text input-->
-        <div class="form-group">
-            <label class="col-md-4 control-label" for="opc2">Opcion 2</label>
-            <div class="col-md-4">
-                <input id="fieldUsuario" name="opc2" type="text" placeholder="Opcion 2..." class="form-control input-md" required="" value="{{Pregunta.opc2}}">
+                <input id="fieldUsuario" name="data[Pregunta][opc1]" type="text" placeholder="Opcion 1..." class="form-control input-md" required="" value="{{Pregunta.opc1}}">
 
             </div>
         </div>
@@ -42,9 +32,9 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="opc3">Opcion 3</label>
+            <label class="col-md-4 control-label" for="opc2">Opción 2</label>
             <div class="col-md-4">
-                <input id="fieldUsuario" name="opc3" type="text" placeholder="Opcion 3..." class="form-control input-md" required="" value="{{Pregunta.opc3}}">
+                <input id="fieldUsuario" name="data[Pregunta][opc2]" type="text" placeholder="Opcion 2..." class="form-control input-md" required="" value="{{Pregunta.opc2}}">
 
             </div>
         </div>
@@ -52,9 +42,19 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="opc4">Opcion 4</label>
+            <label class="col-md-4 control-label" for="opc3">Opción 3</label>
             <div class="col-md-4">
-                <input id="fieldUsuario" name="opc4" type="text" placeholder="Opcion 4..." class="form-control input-md" required="" value="{{Pregunta.opc4}}">
+                <input id="fieldUsuario" name="data[Pregunta][opc3]" type="text" placeholder="Opcion 3..." class="form-control input-md" required="" value="{{Pregunta.opc3}}">
+
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="opc4">Opción 4</label>
+            <div class="col-md-4">
+                <input id="fieldUsuario" name="data[Pregunta][opc4]" type="text" placeholder="Opcion 4..." class="form-control input-md" required="" value="{{Pregunta.opc4}}">
 
             </div>
         </div>
@@ -64,7 +64,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="just">Justificacion</label>
             <div class="col-md-4">
-                <input id="fieldUsuario" name="just" type="text" placeholder="Justificacion..." class="form-control input-md" required="" value="{{Pregunta.just}}">
+                <input id="fieldUsuario" name="data[Pregunta][just]" type="text" placeholder="Justificacion..." class="form-control input-md" required="" value="{{Pregunta.just}}">
 
             </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="id_tema">Tema</label>
             <div class="col-md-4">
-                <select id="id_tema" name="id_tema" class="form-control" value="{{Pregunta.id_tema}}">
+                <select id="id_tema" name="data[Pregunta][id_tema]" class="form-control" value="{{Pregunta.id_tema}}">
                     {% for tema in temas%}
                         <option value={{ tema.Tema.id }}>{{ tema.Tema.nombre }}</option>
                     {% endfor %}
@@ -85,7 +85,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="opcc">Opcion Correcta</label>
             <div class="col-md-4">
-                <select id="opcc" name="opcc" class="form-control" value="{{Pregunta.opcc}}">
+                <select id="opcc" name="data[Pregunta][opcc]" class="form-control" value="{{Pregunta.opcc}}">
                     {% for opc in 1..4%}
                         <option value={{ opc }}>Opcion {{ opc}}</option>
                     {% endfor %}
@@ -94,15 +94,15 @@
         </div>
 
 
-        <!-- Text input-->
+        <!-- File Chooser-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="recurso">Recurso</label>
-            <div class="col-md-4">
-                <input id="recurso" name="recurso" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Pregunta.recurso}}'>
-
-            </div>
+            <div class="col-md-4 fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                    <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Seleccionar</span><span class="fileinput-exists">Cambiar</span><input type="file" name="data[Pregunta][recurso]" id="recurso"></span>
+                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remover</a>
+                </div>
         </div>
-
 
 
         <!-- Button -->
@@ -122,6 +122,11 @@
 </form>
 
 
+<div class="container-fluid" id="error">
+
+</div>
+
 {% block scripts %}
     {{html.script('management')  }}
+    {{html.script('jasny-bootstrap.min') }}
 {% endblock %}

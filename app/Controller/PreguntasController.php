@@ -16,6 +16,12 @@ class PreguntasController extends AppController {
 
     public function eliminar()
     {
+        $pregunta = $this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$this->request->data['id'])));
+        if($pregunta['Pregunta']['recurso']!='')
+        {
+            $filename = WWW_ROOT.'files'.DS.$pregunta['Pregunta']['recurso'];
+            unlink($filename);
+        }
         $this->Pregunta->delete($this->request->data['id']);
         echo 'success';
     }
@@ -38,27 +44,40 @@ class PreguntasController extends AppController {
         $this->autoRender = false;
         if($this->request->is('post'))
         {
-            if($this->request->data['recurso']=="")
-                $this->request->data['recurso'==null];
-            $this->Pregunta->create();
-            $preguntaData = array('oracion'=>$this->request->data['oracion'],'opc1'=>$this->request->data['opc1'],
-            'opc2'=>$this->request->data['opc2'],'opc3'=>$this->request->data['opc3'],'opc4'=>$this->request->data['opc4'],
-            'just'=>$this->request->data['just'],'id_tema'=>$this->request->data['id_tema'],'opcc'=>$this->request->data['opcc'],
-            'recurso'=>$this->request->data['recurso']);
-            if($this->Pregunta->save($preguntaData))
+            $filename = WWW_ROOT.'files'.DS.$this->request->data['Pregunta']['recurso']['name'];
+            if(!file_exists($filename))
             {
-                echo "success";
-                $this->Pregunta->clear();
-            }
-            else{
-                $errors=array();
-                foreach($this->Pregunta->validationErrors as $error)
-                {
-                    $errors[]=$error;
+                /* copy uploaded file */
+                if (move_uploaded_file($this->request->data['Pregunta']['recurso']['tmp_name'],$filename)) {
+                    $this->request->data['Pregunta']['recurso']=$this->request->data['Pregunta']['recurso']['name'];
+                    if($this->Pregunta->save($this->request->data['Pregunta']))
+                    {
+
+                        echo "success";
+                        $this->Pregunta->clear();
+                    }
+                    else{
+                        unlink($filename);
+                        $errors=array();
+                        foreach($this->Pregunta->validationErrors as $error)
+                        {
+                            $errors[]=$error;
+                        }
+                        echo  json_encode($errors);
+                    }
+
                 }
-                echo  json_encode($errors);
+                else echo "No se pudo mover el archivo";
+
             }
+            else echo "Archivo ya existente";
+
+
 
         }
     }
+
+
+
+
 } 

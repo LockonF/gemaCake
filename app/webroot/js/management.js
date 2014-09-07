@@ -16,32 +16,37 @@ $('.delete-element').click(function(event)
 
     function createOrModElement(clase,metodo,forma)
     {
-        $.post(clase+'/'+metodo,
-            $('#'+forma).serialize(),
-            function(data){
-                console.log("Result:"+data);
-                if(data=='success')
-                {
-                    var  alert = $(".alert-success");
-                    alert.addClass('in');
-                    alert.toggle();
-                }
-                else
-                {
-                    var alert = $(".alert-danger");
-                    alert.addClass('in');
-                    alert.toggle();
+
+           var formElement = document.getElementById(forma)
+            var formData = new FormData(formElement);
+            $.ajax({
+                url: clase+"/"+metodo,
+                type: "POST",
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                success: function(data){
+                    if(data=='success')
+                    {
+                        var  alert = $(".alert-success");
+                        alert.addClass('in');
+                        alert.toggle();
+                    }
+                    else
+                    {
+                        $("#error").html(data);
+                        var alert = $(".alert-danger");
+                        alert.addClass('in');
+                        alert.toggle();
+
+                    }
+                    window.setTimeout(function() {
+                        alert.removeClass('in');
+                        alert.toggle();
+                    }, 2500);
 
                 }
-                window.setTimeout(function() {
-                    alert.removeClass('in');
-                    alert.toggle();
-                }, 2500);
-
-
-            }
-
-        );
+            });
         return false;
     }
 
