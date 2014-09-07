@@ -30,8 +30,7 @@ class PreguntasController extends AppController {
         $pregunta = $this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$this->request->data['id'])));
         if($pregunta['Pregunta']['recurso']!='')
         {
-            $filename = WWW_ROOT.'files'.DS.$pregunta['Pregunta']['recurso'];
-            unlink($filename);
+            $this->deleteFile($pregunta['Pregunta']['recurso'],$pregunta['Tema']['nombre']);
         }
         $this->Pregunta->delete($this->request->data['id']);
         echo 'success';
@@ -68,33 +67,37 @@ class PreguntasController extends AppController {
         $this->autoRender = false;
         if($this->request->is('post'))
         {
-            $filename = WWW_ROOT.'files'.DS.$this->request->data['Pregunta']['recurso']['name'];
-            if(!file_exists($filename))
+            $tema = $this->Pregunta->Tema->find('first',array('conditions'=>array('Tema.id'=>$this->request->data['Pregunta']['id_tema'])));
+            $tema = $tema['Tema']['nombre'];
+            $name= $this->request->data['Pregunta']['recurso']['name'];
+            $tempName = $this->request->data['Pregunta']['recurso']['tmp_name'];
+
+            if($this->createFile($name,$tempName,$tema) || $this->request->data['Pregunta']['recurso']=="")
             {
-                /* Copiar Archivo*/
-                if (move_uploaded_file($this->request->data['Pregunta']['recurso']['tmp_name'],$filename)) {
-                    $this->request->data['Pregunta']['recurso']=$this->request->data['Pregunta']['recurso']['name'];
-                    if($this->Pregunta->save($this->request->data['Pregunta']))
-                    {
-
-                        echo "success";
-                        $this->Pregunta->clear();
-                    }
-                    else{
-                        unlink($filename);
-                        $errors=array();
-                        foreach($this->Pregunta->validationErrors as $error)
-                        {
-                            $errors[]=$error;
-                        }
-                        echo  json_encode($errors);
-                    }
-
+                if($this->request->data['Pregunta']['recurso']!="")
+                {
+                    $this->request->data['Pregunta']['recurso']=$tema.DS.$name;
                 }
-                else echo "No se pudo mover el archivo";
+                else
+                {
+                    $this->request->data['Pregunta']['recurso']=null;
+                }
 
+                if($this->Pregunta->save($this->request->data['Pregunta']))
+                {
+                    echo "success";
+                }
+                else
+                {
+                    $errors=array();
+                    foreach($this->Pregunta->validationErrors as $error)
+                    {
+                        $errors[]=$error;
+                    }
+                    echo  json_encode($errors);
+                }
             }
-            else echo "Archivo ya existente";
+            else echo "No se pudo crear archivo";
         }
     }
 
@@ -102,50 +105,101 @@ class PreguntasController extends AppController {
     {
         $this->autoRender=false;
         $pregunta = $this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$this->request->data['Pregunta']['id'])));
+        $tema = $pregunta['Tema']['nombre'];
 
         if($this->request->data['changeFile']=='true')
         {
-            if($pregunta['Pregunta']['recurso']!='')
-            {
-                $filename = WWW_ROOT.'files'.DS.$pregunta['Pregunta']['recurso'];
-                unlink($filename);
-            }
-            $filename = WWW_ROOT.'files'.DS.$this->request->data['Pregunta']['recurso']['name'];
-            if(!file_exists($filename))
-            {
-                /* Copiar Archivo*/
-                if (move_uploaded_file($this->request->data['Pregunta']['recurso']['tmp_name'],$filename)) {
-                    $this->request->data['Pregunta']['recurso']=$this->request->data['Pregunta']['recurso']['name'];
+            $this->deleteFile($pregunta['Pregunta']['recurso'],$pregunta['Tema']['nombre']);
+            $name= $this->request->data['Pregunta']['recurso']['name'];
+            $tempName = $this->request->data['Pregunta']['recurso']['tmp_name'];
 
+            if($this->createFile($name,$tempName,$tema) || $this->request->data['Pregunta']['recurso']=="")
+            {
+                if($this->request->data['Pregunta']['recurso']!="")
+                {
+                    $this->request->data['Pregunta']['recurso']=$tema.DS.$name;
                 }
-                else echo "No se pudo mover el archivo";
-
+                else
+                {
+                    $this->request->data['Pregunta']['recurso']=null;
+                }
+                if($this->Pregunta->save($this->request->data['Pregunta']))
+                 echo "success";
+             else
+                {
+                    $errors=array();
+                    foreach($this->Pregunta->validationErrors as $error)
+                    {
+                        $errors[]=$error;
+                    }
+                    echo  json_encode($errors);
+                }
             }
         }
         else
         {
             $this->request->data['Pregunta']['recurso']=$pregunta['Pregunta']['recurso'];
-        }
-        if($this->Pregunta->save($this->request->data['Pregunta']))
-        {
-
-            echo "success";
-            $this->Pregunta->clear();
-        }
-        else{
-            unlink($filename);
-            $errors=array();
-            foreach($this->Pregunta->validationErrors as $error)
+            if($this->Pregunta->save($this->request->data['Pregunta']))
+                echo "success";
+            else
             {
-                $errors[]=$error;
+                $errors=array();
+                foreach($this->Pregunta->validationErrors as $error)
+                {
+                    $errors[]=$error;
+                }
+                echo  json_encode($errors);
             }
-            echo  json_encode($errors);
         }
-
-
 
     }
 
+
+    public function deleteFile($name,$tema)
+    {
+        try{
+            if($name!='')
+            {
+                $filename = WWW_ROOT.'files'.DS.$$tema.DS.$name;
+                unlink($filename);
+                return true;
+            }
+            return false;
+        }catch (Exception $e)
+        {
+            echo "No se pudo eliminar el archivo";
+        }
+
+    }
+
+    public function createFile($name,$tempName,$tema)
+    {
+        try{
+            if (!file_exists(WWW_ROOT.'files'.DS.$tema)) {
+                mkdir(WWW_ROOT.'files'.DS.$tema, 0777, true);
+            }
+            $filename = WWW_ROOT.'files'.DS.$tema.DS.$name;
+            if(!file_exists($filename))
+            {
+                /* Copiar Archivo*/
+                if (move_uploaded_file($tempName,$filename)) {
+                    return true;
+                }
+            }
+            else{
+                $md5Temp = md5_file($tempName);
+                $md5Existing = md5_file($filename);
+                if($md5Existing==$md5Temp)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }catch (Exception $e){
+            echo "No se pudo crear el archivo";
+        }
+
+    }
 
 
 } 
