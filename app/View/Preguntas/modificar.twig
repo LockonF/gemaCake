@@ -11,6 +11,34 @@
 <form class="form-horizontal" id="form-create-pregunta">
     <fieldset>
 
+        {% if Pregunta != null%}
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="id">ID</label>
+                <div class="col-md-4">
+                    <input id="fieldUsuario" name="data[Pregunta][id]" type="text" placeholder="Id..." class="form-control input-md" readonly required="" value="{{Pregunta.id}}">
+
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="changeFile">Cambiar Recurso</label>
+                <div class="col-md-4">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active" id="changeFileTrue">
+                            <input type="radio" name="changeFile" value="true"  checked > Si
+                        </label>
+                        <label class="btn btn-primary" id="changeFileFalse">
+                            <input type="radio" name="changeFile" value="false"  > No
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
+
         <!-- Text input-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="oracion">Oración</label>
@@ -95,7 +123,7 @@
 
 
         <!-- File Chooser-->
-        <div class="form-group">
+        <div class="form-group" id="fileChooser">
             <label class="col-md-4 control-label" for="recurso">Recurso</label>
             <div class="col-md-4 fileinput fileinput-new input-group" data-provides="fileinput">
                     <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
@@ -109,7 +137,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="btn-enviar"></label>
             <div class="col-md-4">
-                {% if User == null%}
+                {% if Pregunta == null%}
                 <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('preguntas','createPregunta','form-create-pregunta')" >Guardar Cambios</button>
 
 

@@ -3,6 +3,16 @@
  */
 
 $(document).ready(function(){
+    $('.btn').button();
+
+$('#changeFileTrue').change(function(){
+        $("#fileChooser").removeClass('hidden');
+});
+$('#changeFileFalse').change(function(){
+    $("#fileChooser").addClass('hidden');
+});
+
+
 
 
 $('.delete-element').click(function(event)

@@ -30,7 +30,7 @@
 			<td>{{pregunta.Pregunta.recurso}}</td>
 
 			<td>
-				<button class='btn btn-md btn-primary' onclick="$('.ver-pregunta').load('Preguntas/modificar',{'id':'{{pregunta.User.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
+				<button class='btn btn-md btn-primary' onclick="$('.ver-pregunta').load('Preguntas/modificar',{'id':'{{pregunta.Pregunta.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
 				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{pregunta.Pregunta.id }}','{{ pregunta.oracion.username }}','Preguntas','pregunta')">
 					<span class='glyphicon glyphicon-remove'></span>
 				</button>
