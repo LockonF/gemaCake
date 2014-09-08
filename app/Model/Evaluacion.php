@@ -8,11 +8,21 @@
 
 class Evaluacion extends AppModel {
 
-    public $useTable = "evaluacioens";
+    public $useTable = "evaluaciones";
 
-    public $hasOne = array('User'=>
+    public $belongsTo = array('User'=>
         array(
             "className"=>'User',
             'foreignKey'=>'user_id'
         )
-    );}
+    );
+    public $hasMany = array('Resultado'=>
+        array(
+            "className"=>'Resultado',
+            'foreignKey'=>'examen_id'
+        )
+    );
+
+
+
+}

@@ -1,5 +1,5 @@
 
-$.get('datos_alumno', function(raw_data){
+$.get('evaluaciones/getDatosAlumno', function(raw_data){
 
     var dataAvances = {
         labels: raw_data['avances']['labels'],

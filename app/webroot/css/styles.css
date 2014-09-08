@@ -1,13 +1,10 @@
 body{
 	font-family: 'Open Sans', sans-serif;
+	background-color:rgb(62, 180, 137);
 }
 
 .logo-mini{
 	width:100px;
-}
-
-.roleText{
-    color: #ffffff;
 }
 
 header{
@@ -61,7 +58,8 @@ footer{
 }
 
 #dashboard-contenido{
-	background-color: #B7CC14;
+	background-color: rgb(62, 180, 137);
+
 }
 
 #dashboard-contenido.card{
@@ -103,4 +101,10 @@ footer{
 
 .respuesta{
 	border-radius:5px;
+	height:1.5em;
+}
+
+.radio{
+	margin:20px;
+	font-size:1.5em;
 }
