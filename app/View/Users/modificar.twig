@@ -11,6 +11,18 @@
 <form class="form-horizontal" id="form-create-user">
     <fieldset>
 
+        {% if User != null %}
+            <!-- Text input-->
+            <div class="form-group hidden">
+                <label class="col-md-4 control-label" for="fieldId">Id</label>
+                <div class="col-md-4">
+                    <input id="fieldId" name="fieldId" type="text" placeholder="Usuario..." class="form-control input-md" required="" value="{{User.id}}" readonly>
+
+                </div>
+            </div>
+
+        {% endif %}
+
         <!-- Text input-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="fieldUsuario">Usuario</label>

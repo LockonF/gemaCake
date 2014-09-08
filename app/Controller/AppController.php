@@ -71,8 +71,8 @@ class AppController extends Controller {
             'action' => 'login'
         );
         $this->Auth->loginRedirect = array(
-            'controller' => 'administrators',
-            'action' => 'index'
+            'controller' => 'users',
+            'action' => 'redirectAction'
         );
         $this->Auth->authorize = array('Controller');
 
@@ -83,7 +83,7 @@ class AppController extends Controller {
  */
 
     public function isAuthorized($user = null) {
-        if(isset($user['role_id']) &&  $user['role_id']==="1")
+        if(isset($user['role_id']) &&  in_array($user['role_id'],array('1', '2','3')))
         {
             return true;
         }

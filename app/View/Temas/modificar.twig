@@ -8,22 +8,39 @@
 
 </div>
 
-<form class="form-horizontal" id="form-create-user">
+<form class="form-horizontal" id="form-create-tema">
     <fieldset>
+
+
+        {% if Tema != null %}
+            <!-- Text input-->
+            <div class="form-group hidden">
+                <label class="col-md-4 control-label" for="fieldId">Id</label>
+                <div class="col-md-4">
+                    <input id="fieldId" name="data[Tema][id]" type="text" placeholder="Usuario..." class="form-control input-md" required="" value="{{Tema.id}}" readonly>
+
+                </div>
+            </div>
+
+        {% endif %}
+
+
+
+
         <!-- Text input-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
             <div class="col-md-4">
-                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Profile.nombre}}'>
+                <input id="fieldNombre" name="data[Tema][nombre]" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Tema.nombre}}'>
 
             </div>
         </div>
 
         <!-- Select Basic -->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldRol">Materia</label>
+            <label class="col-md-4 control-label" for="fieldMateria">Materia</label>
             <div class="col-md-4">
-                <select id="fieldRol" name="fieldRol" class="form-control" value="{{User.role_id}}">
+                <select id="fieldMateria" name="data[Tema][id_materia]" class="form-control" value="{{Tema.id_Materia}}">
                     {% for materia in materias %}
                     <option value={{ materia.Materia.id }}>{{ materia.Materia.nombre }}</option>
                     {% endfor %}
@@ -36,12 +53,12 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="btn-enviar"></label>
             <div class="col-md-4">
-                {% if User == null%}
-                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','createUser','form-create-user')" >Guardar Cambios</button>
+                {% if Tema == null%}
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('temas','createTema','form-create-tema')" >Guardar Cambios</button>
 
 
                 {% else %}
-                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('users','executeMod','form-create-user')">Guardar Cambios</button>
+                <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('temas','executeMod','form-create-tema')">Guardar Cambios</button>
                 {% endif %}
             </div>
         </div>

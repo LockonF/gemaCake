@@ -22,12 +22,29 @@ class MateriasController extends AppController {
 
     public function modificar()
     {
-        $materia=$this->Materia->find('first',array('contitions'=>array('Materia.id'=>$this->request->data['id'])));
+        $materia = $this->Materia->find("first",array("conditions"=>array("Materia.id"=>$this->request->data['id'])));
         $this->set($materia);
     }
 
 
 
+    public function executeMod()
+    {
+        $this->autoRender=false;
+       if($this->Materia->save($this->request->data['Materia']))
+        {
+            echo "success";
+        }
+        else
+        {
+            $errors=array();
+            foreach($this->User->validationErrors as $error)
+            {
+                $errors[]=$error;
+            }
+            echo  json_encode($errors);
+        }
+    }
 
 
     public function createMateria()
@@ -35,10 +52,7 @@ class MateriasController extends AppController {
         $this->autoRender=false;
         if($this->request->is('post'))
         {
-            $materiaData = array("nombre"=>$this->request->data['fieldNombre'],
-                'numpreguntas'=>$this->request->data['fieldNumPreguntas']);
-            $this->Materia->create();
-            if($this->Materia->save($materiaData))
+            if($this->Materia->save($this->request->data['Materia']))
             {
                 echo "success";
                 $this->Materia->clear();

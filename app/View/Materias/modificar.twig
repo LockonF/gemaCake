@@ -11,11 +11,23 @@
 <form class="form-horizontal" id="form-create-materia">
     <fieldset>
 
+        {% if Materia != null %}
+            <!-- Text input-->
+            <div class="form-group hidden">
+                <label class="col-md-4 control-label" for="fieldId">Id</label>
+                <div class="col-md-4">
+                    <input id="fieldId" name="data[Materia][id]" type="text" placeholder="Materia..." class="form-control input-md" required="" value="{{Materia.id}}" readonly>
+
+                </div>
+            </div>
+
+        {% endif %}
+
         <!-- Text input-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
             <div class="col-md-4">
-                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Materia.nombre}}'>
+                <input id="fieldNombre" name="data[Materia][nombre]" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Materia.nombre}}'>
 
             </div>
         </div>
@@ -24,7 +36,7 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="fieldNumPreguntas">Numero de Preguntas</label>
             <div class="col-md-4">
-                <input id="fieldNumPreguntas" name="fieldNumPreguntas" type="text" placeholder="Numero de Preguntas..." class="form-control input-md" value='{{Materia.numpreguntas}}'>
+                <input id="fieldNumPreguntas" name="data[Materia][numpreguntas]" type="text" placeholder="Numero de Preguntas..." class="form-control input-md" value='{{Materia.numpreguntas}}'>
             </div>
         </div>
 

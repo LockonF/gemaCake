@@ -28,9 +28,30 @@ class UsersController extends AppController{
             if ($this->Auth->login()) {
                 return $this->redirect($this->Auth->redirect());
             }
+
             $this->redirect(array('controller'=>'pages','action'=>'display'));
         }
     }
+
+
+    public function redirectAction()
+    {
+        $this->autoRender=false;
+
+        switch($this->Auth->user('role_id'))
+        {
+            case "1":
+                return $this->redirect(
+                    array('controller' => 'administrators', 'action' => 'index')
+                );
+            case "3":
+                return $this->redirect(
+                    array('controller' => 'evaluaciones', 'action' => 'index')
+                );
+        }
+    }
+
+
 
     public function logout() {
         return $this->redirect($this->Auth->logout());
@@ -71,8 +92,7 @@ class UsersController extends AppController{
     public function executeMod()
     {
         $this->autoRender=false;
-        $user = $this->User->find('first',array('conditions'=>array('User.username'=>$this->request->data['fieldUsuario'])));
-        $userData = array('id'=>$user['User']['id'],'username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
+        $userData = array('id'=>$this->request->data['fieldId'],'username'=>$this->request->data['fieldUsuario'],'password'=>$this->request->data['fieldPassword'],
             'password-confirm'=>$this->request->data['fieldPasswordConfirm'],'email'=>$this->request->data['fieldEmail'],
             'role_id'=>$this->request->data['fieldRol']);
         $this->User->create();
