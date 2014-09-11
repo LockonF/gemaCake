@@ -160,7 +160,7 @@ class PreguntasController extends AppController {
         try{
             if($name!='')
             {
-                $filename = WWW_ROOT.'files'.DS.$$tema.DS.$name;
+                $filename = WWW_ROOT.'files'.DS.$name;
                 unlink($filename);
                 return true;
             }

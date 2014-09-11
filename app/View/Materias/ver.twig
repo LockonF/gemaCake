@@ -8,6 +8,8 @@
 			<th>Id</th>
 			<th>Nombre</th>
 			<th>NumPreguntas</th>
+            <th>Etiqueta</th>
+
 			<th></th>
 		</tr>
 		{% for materia in materias %}
@@ -15,7 +17,9 @@
 			<td>{{materia.Materia.id}}</td>
 			<td>{{materia.Materia.nombre}}</td>
 			<td>{{materia.Materia.numpreguntas}}</td>
-			<td>
+            <td>{{materia.Materia.label}}</td>
+
+            <td>
 				<button class='btn btn-md btn-primary' onclick="$('.ver-materia').load('Materias/modificar',{'id':'{{materia.Materia.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>
 				<button class='btn btn-md btn-danger' data-toggle="modal" data-target="#modal-preguntar" onclick="deleteElement('{{materia.Materia.id }}','{{ materia.Materia.nombre}}','Materias','materia')">
 					<span class='glyphicon glyphicon-remove'></span>

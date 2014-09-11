@@ -8,15 +8,18 @@
 
 class Resultado extends AppModel{
     public $useTable = "resultados";
-    public $belongsTo = array('Evaluacion'=>
+    public $belongsTo = array(
+       'Tema'=>array(
+           "className"=>'Tema',
+           'foreignKey'=>'tema_id'
+       ),
+        'Evaluacion'=>
         array(
             "className"=>'Evaluacion',
             'foreignKey'=>'examen_id'
-        )
+        ),
+
     );
-    public $hasOne = array("Tema"=>array(
-        "className"=>'Tema',
-        'foreignKey'=>"tema_id"
-    ));
+
 
 } 
