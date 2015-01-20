@@ -24,6 +24,8 @@ $('.delete-element').click(function(event)
 
 });
 
+
+
     function createOrModElement(clase,metodo,forma)
     {
 
@@ -36,19 +38,19 @@ $('.delete-element').click(function(event)
                 processData: false,  // tell jQuery not to process the data
                 contentType: false,  // tell jQuery not to set contentType
                 success: function(data){
+
                     if(data=='success')
                     {
                         var  alert = $(".alert-success");
                         alert.addClass('in');
                         alert.toggle();
+
                     }
                     else
                     {
-                        $("#error").html(data);
                         var alert = $(".alert-danger");
                         alert.addClass('in');
                         alert.toggle();
-
                     }
                     window.setTimeout(function() {
                         alert.removeClass('in');

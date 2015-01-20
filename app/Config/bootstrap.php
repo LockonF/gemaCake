@@ -107,3 +107,6 @@ CakeLog::config('error', array(
 ));
 
 CakePlugin::loadAll();
+CakePlugin::loadAll(array(
+    'OAuth' => array('routes' => true)
+));

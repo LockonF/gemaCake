@@ -16,9 +16,17 @@
 			<a href="#preguntas-crear" role='tab' data-toggle='tab' onclick='$("#preguntas-crear").load("Preguntas/modificar")'>
 				Crear una  pregunta
 			</a>
-		</li>
 
-	</ul>
+        </li>
+        <li>
+            <a href="#preguntas-batch" role='tab' data-toggle='tab'>
+                Carga por volumen
+            </a>
+        </li>
+
+
+
+    </ul>
 
 	<div class='tab-content' style='padding-top:1.5em'>
 		<div id="preguntas-buscar" class='tab-pane fade in active'>
@@ -29,7 +37,11 @@
 		</div>
 		<div id="preguntas-crear" class='tab-pane fade'>
 		</div>
-		
-	</div>
+        <div id="preguntas-batch" class='tab-pane fade'>
+            {% include "Preguntas/batch.twig" %}
+        </div>
+
+
+    </div>
 </div>
 {% endblock %}

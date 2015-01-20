@@ -72,7 +72,7 @@ footer{
 }
 
 .promedio{
-	font-size: 10em;
+	font-size: 6em;
 }
 
 .materia-icon{
@@ -94,7 +94,7 @@ footer{
 
 
 #question-container{
-	max-height:52em;
+	/*max-height:52em;*/
 	overflow-y:auto;
 
 }
@@ -107,4 +107,17 @@ footer{
 .radio{
 	margin:20px;
 	font-size:1.5em;
+}
+
+.roleText{
+    color:#ffffff;
+}
+
+.ver-pregunta{
+    width: 100%;
+    overflow-x:auto;
+}
+
+.bold{
+    font-weight:bold;
 }

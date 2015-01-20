@@ -24,7 +24,25 @@
  * its action called 'display', and we pass a param to select the view file
  * to use (in this case, /app/View/Pages/home.ctp)...
  */
-	Router::connect('/', array('controller' => 'users', 'action' => 'login'));
+
+
+Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
+Router::connect('/', array('controller' => 'users', 'action' => 'login'));
+
+
+Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+Router::connect('/Evaluaciones/Users/logout', array('controller' => 'users', 'action' => 'logout'));
+Router::connect('/Evaluaciones/Evaluaciones', array('controller' => 'Evaluaciones', 'action' => 'index'));
+Router::connect('/Evaluaciones/evaluaciones', array('controller' => 'Evaluaciones', 'action' => 'index'));
+Router::connect('/Evaluaciones/reanudar_evaluacion', array('controller' => 'Evaluaciones', 'action' => 'evaluacion'));
+Router::connect('/reanudar_evaluacion', array('controller' => 'Evaluaciones', 'action' => 'evaluacion'));
+Router::connect('/evaluacion', array('controller' => 'Evaluaciones', 'action' => 'evaluacion'));
+Router::connect('/revision', array('controller' => 'Evaluaciones', 'action' => 'revision'));
+Router::connect('/calificar', array('controller' => 'Evaluaciones', 'action' => 'calificar'));
+Router::connect('/getDatosAlumno', array('controller' => 'Evaluaciones', 'action' => 'getDatosAlumno'));
+
+
+
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
  */
@@ -41,3 +59,10 @@
  * the built-in default routes.
  */
 	require CAKE . 'Config' . DS . 'routes.php';
+
+
+/**
+ * Our custom REST routes
+ */
+    Router::parseExtensions('json','xml');
+    Router::mapResources(array('preguntas'));

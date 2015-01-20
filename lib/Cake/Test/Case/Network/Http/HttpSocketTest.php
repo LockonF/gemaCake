@@ -786,7 +786,7 @@ class HttpSocketTest extends CakeTestCase {
 			'uri' => 'http://localhost/oneuri',
 			'redirect' => 1
 		);
-		$serverResponse1 = "HTTP/1.x 302 Found\r\nDate: Mon, 16 Apr 2007 04:14:16 GMT\r\nServer: CakeHttp Server\r\nContent-Type: text/html\r\nLocation: http://i.cmpnet.com%2Ftechonline%2Fpdf%2Fa.pdf=\r\n\r\n";
+		$serverResponse1 = "HTTP/1.x 302 Found\r\nDate: Mon, 16 Apr 2007 04:14:16 GMT\r\nServer: CakeHttp Server\r\nContent-Type: text/html\r\nLocation: http://i.cmpnet.com%2Ftechonline%2Fpdf%2Fa+b.pdf=\r\n\r\n";
 		$serverResponse2 = "HTTP/1.x 200 OK\r\nDate: Mon, 16 Apr 2007 04:14:16 GMT\r\nServer: CakeHttp Server\r\nContent-Type: text/html\r\n\r\n<h1>You have been redirected</h1>";
 
 		$this->Socket->expects($this->at(1))
@@ -797,7 +797,7 @@ class HttpSocketTest extends CakeTestCase {
 			->method('write')
 			->with($this->logicalAnd(
 				$this->stringContains('Host: i.cmpnet.com'),
-				$this->stringContains('GET /techonline/pdf/a.pdf')
+				$this->stringContains('GET /techonline/pdf/a+b.pdf')
 			));
 
 		$this->Socket->expects($this->at(4))
@@ -1074,6 +1074,16 @@ class HttpSocketTest extends CakeTestCase {
 		));
 		$this->assertEquals($this->Socket->request['auth'], array('Basic' => array('user' => 'joel', 'pass' => 'hunter2')));
 		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic am9lbDpodW50ZXIy') !== false);
+
+		$this->Socket->configAuth('Basic', 'mark', 'password');
+		$this->Socket->request(array(
+			'method' => 'GET',
+			'uri' => 'http://example.com/test',
+			'header' => array(
+				'Authorization' => 'OtherAuth Hi.There'
+			)
+		));
+		$this->assertPattern('/Authorization: OtherAuth Hi\.There/m', $this->Socket->request['header']);
 	}
 
 /**
@@ -1089,6 +1099,15 @@ class HttpSocketTest extends CakeTestCase {
 
 		$this->Socket->get('/test2');
 		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);
+
+		$this->Socket->request(array(
+			'method' => 'GET',
+			'uri' => 'http://example.com/test',
+			'header' => array(
+				'Authorization' => 'OtherAuth Hi.There'
+			)
+		));
+		$this->assertPattern('/Authorization: OtherAuth Hi\.There/m', $this->Socket->request['header']);
 
 		$this->Socket->get('/test3');
 		$this->assertTrue(strpos($this->Socket->request['header'], 'Authorization: Basic bWFyazpzZWNyZXQ=') !== false);

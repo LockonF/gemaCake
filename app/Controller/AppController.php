@@ -40,6 +40,7 @@ class AppController extends Controller {
     );
 
 	public $components = array(
+        'RequestHandler',
         'Auth' => array(
             'authenticate' =>
             array('Form' => array(

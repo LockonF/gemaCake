@@ -10,14 +10,115 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 class UsersController extends AppController{
 
 
+    public $components = array(
+        'RequestHandler',
+        "OAuth.OAuth",
+        'Rest.Rest' => array(
+            'catchredir' => true,
+            'debug'=>2,
+            'actions' => array(
+                'createOAuthClient' => array(
+                    'extract' => array('client'),
+                )
+            ),
+            'log' => array(
+                'pretty' => true,
+            ),
+            'ratelimit' => array(
+                'enable' => false
+            ),
+        ),
+
+        'Auth' => array(
+            'authenticate' =>
+                array('Form' => array(
+                    'passwordHasher'=>'Blowfish',
+                    'userModel' => 'User',
+                    'fields' => array(
+                        'username' => 'username',
+                        'password' => 'password'
+                    )
+                ))
+
+        ),
+        'Session','DebugKit.Toolbar','RequestHandler'
+    );
+
+
+
+
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow();
+        $this->OAuth->allow();
+
+    }
+
+    /**
+     *OAuth Related Functions: Create
+     */
+    public function createOAuthClient()
+    {
+        if($this->request->is("get"))
+        {
+            if(trim($this->request->query["uri"]==""))
+            {
+                $redirectURI = "/cakephp/users/demoCode";
+            }
+            else{
+                $redirectURI = $this->request->query["uri"];
+            }
+            $client = $this->OAuth->Client->add($redirectURI);
+            $client['Client']['uri'] = "/oauth/authorize?response_type=code&client_id=".$client['Client']['client_id']."&redirect_url=/cakephp/users/demoCode.json";
+            $this->set('client',$client['Client']);
+            $this->Session->write(array("user"=>
+                array("id"=>$client['Client']['client_id'],
+                    "secret"=>$client['Client']['client_secret']
+                )));
+            $redirectURI="";
+        }
+
+    }
+
+    public function demoCode()
+    {
+        $this->autoRender=false;
+        echo "Please visit this url: /oauth/token?grant_type=authorization_code&code=".$this->request->query['code']."&client_id=xxxx&client_secret=xxxx";
+        $this->set("code",$this->request->query['code']);
+
+        //$client_id =$this->Session->read("user.id");
+        //$client_secret = $this->Session->read("user.secret");
+        //$this->redirect("/oauth/token?grant_type=authorization_code&code=".$this->request->query['code']."from_above&client_id=".$client_id."&client_secret=".$client_secret);
+
+
+    }
+
+    public function demoGetToken()
+    {
+        $this->autoRender=false;
     }
 
 
+
+
+
+
+    /**
+     * Login
+     */
+
     public function login() {
         $this->layout='layout-main';
+        if ($this->request->is('get'))
+        {
+            if(isset($this->request->query))
+            {
+                $this->Session->write('Query',$this->request->query);
+            }
+            else{
+                $this->Session->delete("Query");
+            }
+        }
         if ($this->request->is('post')) {
             $this->request->data['User']=$this->User->create();
             $this->request->data['User']['username']=$this->request->data['username'];
@@ -25,7 +126,15 @@ class UsersController extends AppController{
             $this->request->data['User']['password']=$this->request->data['password'];
             unset($this->request->data['password']);
 
+
             if ($this->Auth->login()) {
+                $query = $this->Session->read("Query");
+                if(isset($query) && count($query)!=0)
+                {
+                    $this->Session->delete("Query");
+                    return $this->redirect(array('plugin'=>'oauth','controller'=>'','action'=>'authorize',"?"=>$query));
+
+                }
                 return $this->redirect($this->Auth->redirect());
             }
 
@@ -43,6 +152,10 @@ class UsersController extends AppController{
             case "1":
                 return $this->redirect(
                     array('controller' => 'administrators', 'action' => 'index')
+                );
+            case "2":
+                return $this->redirect(
+                    array('controller' => 'profesores', 'action' => 'index')
                 );
             case "3":
                 return $this->redirect(
@@ -137,6 +250,12 @@ class UsersController extends AppController{
         $this->set('usuarios', $users);
     }
 
+
+
+
+    /*
+     * Crear Usuario
+     */
     public function createUser()
     {
         $this->autoRender = false;

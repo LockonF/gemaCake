@@ -8,16 +8,23 @@
 
 class Incorrecta extends AppModel{
 
-    public $useTable = 'materias';
+    public $useTable = 'incorrectas';
 
-    public $belongsTo = array('Resultado'=>array(
-        'className'=>'Resultado',
-        'foreignKey'=>'resultado_id'
-    ));
+    public $belongsTo =
+        array(
+            'Resultado'=>
+                array(
+                    'className'=>'Resultado',
+                    'foreignKey'=>'resultado_id'
+                    ),
+            'Pregunta'=>array(
+                    'className'=>'Pregunta',
+                    'foreginKey'=>'pregunta_id'
+                    )
+    )
 
-    public $hasMany = array('Pregunta'=>array(
-        'className'=>'Pregunta',
-        'foreginKey'=>'pregunta_id'
-    ));
+    ;
+
+
 
 } 

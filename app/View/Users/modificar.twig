@@ -1,9 +1,9 @@
 <div id="alerts">
     <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
-        <strong>Error!</strong>
+        <strong id="error-message">Error</strong>
     </div>
     <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
-        <strong>Éxito</strong>
+        <strong id="success-message">Éxito</strong>
     </div>
 
 </div>
@@ -17,7 +17,6 @@
                 <label class="col-md-4 control-label" for="fieldId">Id</label>
                 <div class="col-md-4">
                     <input id="fieldId" name="fieldId" type="text" placeholder="Usuario..." class="form-control input-md" required="" value="{{User.id}}" readonly>
-
                 </div>
             </div>
 
@@ -25,28 +24,48 @@
 
         <!-- Text input-->
         <div class="form-group">
+            <div class="control-group">
             <label class="col-md-4 control-label" for="fieldUsuario">Usuario</label>
-            <div class="col-md-4">
-                <input id="fieldUsuario" name="fieldUsuario" type="text" placeholder="Usuario..." class="form-control input-md" required="" value="{{User.username}}">
+                <div class="controls">
 
+                    <div class="col-md-4">
+                    <input data-validation-regex-regex="[a-zA-Z0-9]{3,30}"
+                       data-validation-regex-message="Debe de contener entre 3 y 30 letras o números"
+                       id="fieldUsuario" name="fieldUsuario" type="text" placeholder="Usuario..." class="form-control input-md" value="{{User.username}}">
+                    <span class="help-block"></span>
+
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Password input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldPassword">Contraseña</label>
-            <div class="col-md-4">
-                <input id="fieldPassword" name="fieldPassword" type="password" placeholder="Contraseña..." class="form-control input-md" required="">
-
+            <div class="control-group">
+                <div class="controls">
+                    <label class="col-md-4 control-label" for="fieldPassword">Contraseña</label>
+                    <div class="col-md-4">
+                        <input required
+                               data-validation-required-message="Este campo es obligatorio"
+                               id="fieldPassword" name="fieldPassword" type="password" placeholder="Contraseña..." class="form-control input-md" >
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Password input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldPasswordConfirm">Confirmación de Contraseña</label>
-            <div class="col-md-4">
-                <input id="fieldPasswordConfirm" name="fieldPasswordConfirm" type="password" placeholder="Contraseña..." class="form-control input-md" required="">
-                <span class="help-block">deben ser idénticas</span>
+            <div class="control-group">
+                <div class="controls">
+                        <label class="col-md-4 control-label" for="fieldPasswordConfirm">Confirmación de Contraseña</label>
+                        <div class="col-md-4">
+                            <input
+                                    data-validation-match-match="fieldPassword"
+                                    data-validation-match-message="Ambas contraseñas deben ser idénticas"
+                                    id="fieldPasswordConfirm" name="fieldPasswordConfirm" type="password" placeholder="Contraseña..." class="form-control input-md">
+                            <span class="help-block"></span>
+                        </div>
+                </div>
             </div>
         </div>
 
@@ -64,36 +83,65 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
-            <div class="col-md-4">
-                <input id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Profile.nombre}}'>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="col-md-4 control-label" for="fieldNombre">Nombre</label>
+                    <div class="col-md-4">
+                        <input
+                                data-validation-regex-regex="[A-ZÑ]{1}[A-Za-zñáéíóú ]+"
+                                data-validation-regex-message="El nombre solo puede contener caracteres y empezar con mayúscula"
+                                id="fieldNombre" name="fieldNombre" type="text" placeholder="Nombre..." class="form-control input-md" required="" value='{{Profile.nombre}}'>
+                        <span class="help-block"></span>
+                    </div>
 
+                   </div>
             </div>
         </div>
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldPaterno">Apellido Paterno</label>
-            <div class="col-md-4">
-                <input id="fieldPaterno" name="fieldPaterno" type="text" placeholder="Apellido Paterno..." class="form-control input-md" value='{{Profile.apaterno}}'>
+            <div class="control-group">
+                <div class="controls">
+                        <label class="col-md-4 control-label" for="fieldPaterno">Apellido Paterno</label>
+                        <div class="col-md-4">
+                        <input
+                                data-validation-regex-regex="[A-ZÑ]{1}[A-Za-zñáéíóú ]+"
+                                data-validation-regex-message="El apellido solo puede contener caracteres y empezar con mayúscula"
+                                id="fieldPaterno" name="fieldPaterno" type="text" placeholder="Apellido Paterno..." class="form-control input-md" value='{{Profile.apaterno}}'>
+                        <span class="help-block"></span>
+                        </div>
+                </div>
             </div>
         </div>
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldMaterno">Apellido Materno</label>
-            <div class="col-md-4">
-                <input id="fieldMaterno" name="fieldMaterno" type="text" placeholder="Apellido Materno..." class="form-control input-md" required="" value='{{Profile.amaterno}}'>
-
+            <div class="control-group">
+                <div class="controls">
+                <label class="col-md-4 control-label" for="fieldMaterno">Apellido Materno</label>
+                    <div class="col-md-4">
+                        <input
+                                data-validation-regex-regex="[A-ZÑ]{1}[A-Za-zñáéíóú ]+"
+                                data-validation-regex-message="El apellido solo puede contener caracteres y empezar con mayúscula"
+                                id="fieldMaterno" name="fieldMaterno" type="text" placeholder="Apellido Materno..." class="form-control input-md" required="" value='{{Profile.amaterno}}'>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="fieldEmail">Correo Electrónico</label>
-            <div class="col-md-4">
-                <input id="fieldEmail" name="fieldEmail" type="text" placeholder="email" class="form-control input-md" required="" value='{{User.email}}'>
-
+            <div class="control-group">
+                <div class="controls">
+                <label class="col-md-4 control-label" for="fieldEmail">Correo Electrónico</label>
+                    <div class="col-md-4">
+                        <input
+                                data-validation-email-message="Tiene que ser una dirección de correo electrónico"
+                                id="fieldEmail" name="fieldEmail" type="email" placeholder="email" class="form-control input-md" required="" value='{{User.email}}'>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
             </div>
         </div>
 

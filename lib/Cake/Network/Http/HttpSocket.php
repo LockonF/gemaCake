@@ -326,8 +326,11 @@ class HttpSocket extends CakeSocket {
 		} elseif (isset($this->request['auth'], $this->request['auth']['method'], $this->request['auth']['user'], $this->request['auth']['pass'])) {
 			$this->configAuth($this->request['auth']['method'], $this->request['auth']['user'], $this->request['auth']['pass']);
 		}
-		$this->_setAuth();
-		$this->request['auth'] = $this->_auth;
+		$authHeader = Hash::get($this->request, 'header.Authorization');
+		if (empty($authHeader)) {
+			$this->_setAuth();
+			$this->request['auth'] = $this->_auth;
+		}
 
 		if (is_array($this->request['body'])) {
 			$this->request['body'] = http_build_query($this->request['body'], '', '&');
@@ -413,7 +416,8 @@ class HttpSocket extends CakeSocket {
 		}
 
 		if ($this->request['redirect'] && $this->response->isRedirect()) {
-			$request['uri'] = trim(urldecode($this->response->getHeader('Location')), '=');
+			$location = trim($this->response->getHeader('Location'), '=');
+			$request['uri'] = str_replace('%2F', '/', $location);
 			$request['redirect'] = is_int($this->request['redirect']) ? $this->request['redirect'] - 1 : $this->request['redirect'];
 			$this->response = $this->request($request);
 		}

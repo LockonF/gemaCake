@@ -5,12 +5,12 @@
     {% if evaluacion_activa %}
         <li><a href="reanudar_evaluacion"><span class='glyphicon glyphicon-edit'></span> Reanudar Evaluación</a></li>
     {% else %}
-        <li><a href="nueva_evaluacion">
+        <li><a href="evaluacion">
                 <span class='glyphicon glyphicon-plus'></span>
                 Nueva Evaluación</a></li>
     {% endif %}
 
-    <li><a href="resultados"><span class='glyphicon glyphicon-list-alt'></span> Mis Resultados</a></li>
+    <li class="hidden"><a href="resultados"><span class='glyphicon glyphicon-list-alt'></span>  Resultados</a></li>
 
 
 {% endblock %}
@@ -21,10 +21,10 @@
             <div class='card col-md-12 text-center'>
                 <div class='text-center'>
                     <h2><span class='glyphicon glyphicon-certificate green'></span>
-                        Tu Promedio</h2>
+                        Puntaje Promedio</h2>
                 </div>
 
-                <span class='promedio text-success'>{{promedio}}</span>
+                <span class='promedio'>{{promedio | number_format(2, '.', ',')}}</span>
             </div>
 
             {% block resultados %}
@@ -60,11 +60,10 @@
                         <div class='col-md-8 text-center'>
 
                             <h1>
-                                <a href="reanudar_evaluacion" class='btn btn-lg btn-success'>Continuar con la Evaluación</a>
+                                <a href="evaluacion" class='btn btn-lg btn-success'>Continuar con la Evaluación</a>
                             </h1>
                             <div class='text-center'>
-                                <p><strong>Tienes una evaluación en curso.</strong> <br>
-                                    Debes completarla antes del {{evaluacion_activa.deadline}}</p>
+                                <p><strong>Tienes una evaluación en curso.</strong> <br></p>
                             </div>
 
                         </div>
@@ -83,7 +82,7 @@
                         <div class='col-md-8 text-center'>
 
                             <h1>
-                                <a href="nueva_evaluacion" class='btn btn-lg btn-success btn-block'>Iniciar Ahora</a>
+                                <a href="evaluacion" class='btn btn-lg btn-success btn-block'>Iniciar Ahora</a>
                             </h1>
                             <div class='col-md-offset-2 col-md-8 text-center'>
                                 <p>Cada evaluación tiene 120 preguntas y tienes tres horas para realizarla.</p>
@@ -101,7 +100,7 @@
                             <span class='glyphicon glyphicon-time green'></span>
                             Últimos Resultados</h2>
 
-                        <a href="resultados" class='btn btn-lg btn-primary'>Ver Todos</a>
+                        <a href="resultados" class='hidden btn btn-lg btn-primary'>Ver Todos</a>
 
                     </div>
                     <div class='col-md-8'>
@@ -118,10 +117,10 @@
 											{% elseif eval.promedio < 60  %}danger{%else%}
 											{% endif %}
 											' >
-                                    <td><a href="revisar_evaluacion">{{eval.fecha}}</a>
+                                    <td><a href="revision?id={{ eval.id }}">{{eval.fecha}}</a>
                                     </td>
                                     <td class='tet'>
-                                        <a href='revisar_evaluacion' class='{% if eval.promedio >= 85 %}text-success
+                                        <a href='revision?id={{ eval.id }}' class='{% if eval.promedio >= 85 %}text-success
 											{% elseif eval.promedio < 85 and eval.promedio >= 60 %}text-warning
 											{% elseif eval.promedio < 60  %}text-danger{%else%}
 											{% endif %}'>
@@ -143,7 +142,7 @@
                             <span class='glyphicon glyphicon-list-alt green'></span>
                             Promedios</h2>
                         <p class='lead'>Así ha cambiado tu promedio depués de cada evaluación.</p>
-                        <p class='lead '><strong>Tu promedio: <span class='text-success '>{{promedio}}</span></strong></p>
+                        <p class='lead '><strong>Tu promedio: <span class='text-success '>{{promedio | number_format(2, '.', ',')}}</span></strong></p>
 
                     </div>
                     <div class='col-md-8 text-center'>

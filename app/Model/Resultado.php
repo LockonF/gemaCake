@@ -18,7 +18,13 @@ class Resultado extends AppModel{
             "className"=>'Evaluacion',
             'foreignKey'=>'examen_id'
         ),
+    );
 
+    public $hasMany = array(
+      'Incorrecta'=>array(
+          'className'=>'Incorrecta',
+          'foreignKey'=>"resultado_id"
+      )
     );
 
 

@@ -1,0 +1,86 @@
+{% extends "Layouts/layout-evaluacion.twig" %}
+
+{% block navbar_primero%}
+    <a href="#resultados" role='tab' data-toggle='tab'>
+        Resultados
+    </a>
+{%endblock%}
+
+
+{% block tab_primero%}
+    <div class='tab-pane fade in active' id='resultados'>
+        <div class='col-md-12 card'>
+            <h1><strong>Consulta tus Resultados</strong></h1>
+            <p class='lead'>
+                Éste es el reporte de Resultados para tu evaluación. <br>
+                Sólo se muestra la justificación para la preguntas que contestaste incorrectamente.
+            </p>
+            <p>
+                <strong>Fecha de Aplicación</strong>: {{resultado.fecha}}
+            </p>
+            <h3>
+                Calificaciones
+            </h3>
+            <table class='table table-hover table-striped'>
+                <tr>
+                    <th>Materia</th>
+                    <th class='text-center'>Calificación</th>
+                    <th>Respuestas Correctas</th>
+                </tr>
+                {% for categoria in resultado.categorias%}
+                    {% set calificacion = categoria.correctas / categoria.total * 100 %}
+                    <tr class='
+	{% if calificacion >= 80 %}success
+	{% elseif calificacion < 80 and calificacion >= 60 %}warning
+	{% elseif calificacion < 60  %}danger{%else%}
+	{% endif %}
+	'>
+                        <td>
+                            <a href="#{{categoria.codigo}}" role='tab' data-toggle='tab'>{{categoria.nombre}}</a>
+                        </td>
+                        <td class='text-center'>{{calificacion | number_format(2, '.', ',')}}</td>
+                        <td>{{categoria.correctas}} de {{categoria.total}}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+    </div>
+{% endblock %}
+
+{%block controles_evaluacion%}
+    <h1><strong>Evaluación</strong></h1>
+    {% set calif_general = resultado.correctas * 100 / totalPreguntas%}
+    <p class='lead '>Calificación: <span class='text-success'>{{calif_general | number_format(2, '.', ',')}}</span></p>
+    <p>Preguntas Correctas: {{resultado.correctas}} de {{totalPreguntas}}</p>
+
+{%endblock%}
+
+
+{%block respuesta%}
+
+    <div class="radio respuesta
+{%if respuesta.correcta%}text-success{%endif%}
+{%if respuesta.seleccionada and not respuesta.correcta%}text-danger{%endif%}
+">
+        <div class='col-xs-10'>
+            <label for='{{pregunta.qid}}'>
+                <input type="radio" name="{{pregunta.qid}}" value="{{loop.index}}"
+                       disabled
+                       {%if respuesta.seleccionada%}checked{%endif%}
+                        >{{respuesta.texto}}
+
+        </div>
+        <div class='col-xs-2 text-right'>
+            {%if respuesta.seleccionada and respuesta.correcta%}
+                <span class='glyphicon glyphicon-ok text-success'></span>
+            {%endif%}
+            {%if respuesta.seleccionada and not respuesta.correcta%}
+                <span class='glyphicon glyphicon-remove text-danger'></span>
+            {%endif%}
+        </div>
+        </label>
+    </div>
+
+{%endblock%}

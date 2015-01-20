@@ -72,7 +72,7 @@ class MateriasController extends AppController {
 
     public function ver()
     {
-        $materias = $this->Materia->find('all');
+         $materias = $this->Materia->find('all');
         $this->set('materias', $materias);
     }
 

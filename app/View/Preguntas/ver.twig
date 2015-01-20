@@ -5,29 +5,34 @@
 	<table class='table table-hover table-striped'>
 		<tr>
 			<th>id</th>
-			<th>Oracion</th>
-			<th>Opc1</th>
-			<th>Opc2</th>
-			<th>Opc3</th>
-			<th>Opc4</th>
-			<th>Justificacion</th>
+			<th>Oración</th>
+			<th>A</th>
+			<th>B</th>
+			<th>C</th>
+			<th>D</th>
+			<th>Justificación</th>
 			<th>Tema</th>
-			<th>Opcion Correcta</th>
 			<th>Recurso</th>
 			<th></th>
 		</tr>
 		{% for pregunta in preguntas%}
 		<tr>
 			<td>{{pregunta.Pregunta.id}}</td>
-			<td>{{pregunta.Pregunta.oracion}}</td>
-			<td>{{pregunta.Pregunta.opc1}}</td>
-			<td>{{pregunta.Pregunta.opc2}}</td>
-			<td>{{pregunta.Pregunta.opc3}}</td>
-			<td>{{pregunta.Pregunta.opc4}}</td>
-			<td>{{pregunta.Pregunta.just}}</td>
+            <td>{{pregunta.Pregunta.oracion}}</td>
+			<td><span class="{% if pregunta.Pregunta.opcc == 1 %}bold text-success{% endif%}">{{pregunta.Pregunta.opc1}}</span></td>
+            <td><span class="{% if pregunta.Pregunta.opcc == 2 %}bold text-success{% endif%}">{{pregunta.Pregunta.opc2}}</span></td>
+            <td><span class="{% if pregunta.Pregunta.opcc == 3 %}bold text-success{% endif%}">{{pregunta.Pregunta.opc3}}</span></td>
+            <td><span class="{% if pregunta.Pregunta.opcc == 4 %}bold text-success{% endif%}">{{pregunta.Pregunta.opc4}}</span></td>
+
+            <td>{{pregunta.Pregunta.just}}</td>
 			<td>{{pregunta.Tema.nombre}}</td>
-			<td>{{pregunta.Pregunta.opcc}}</td>
-			<td>{{pregunta.Pregunta.recurso}}</td>
+			<td>
+                {%if pregunta.Pregunta.recurso %}
+                Sí
+                {% else %}No
+                {% endif %}
+
+            </td>
 
 			<td>
 				<button class='btn btn-md btn-primary' onclick="$('.ver-pregunta').load('Preguntas/modificar',{'id':'{{pregunta.Pregunta.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>

@@ -1,5 +1,5 @@
 
-$.get('evaluaciones/getDatosAlumno', function(raw_data){
+$.get('getDatosAlumno', function(raw_data){
 
     raw_data = jQuery.parseJSON(raw_data);
     var dataAvances = {
@@ -94,7 +94,7 @@ $.get('evaluaciones/getDatosAlumno', function(raw_data){
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "rgba(183,204,20,1)",
                 pointHighlightStroke: "rgba(220,220,220,1)",
-                data: raw_data['promedios']['data']
+                data: raw_data['promedios']['data'].reverse()
             },
 
         ]

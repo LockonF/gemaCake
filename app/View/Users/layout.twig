@@ -17,6 +17,11 @@
 				Crear un Usuario	
 			</a>
 		</li>
+        <li>
+            <a href="#usuarios-crear-oauth" role='tab' data-toggle='tab'>
+                Crear Cliente Oauth
+            </a>
+        </li>
 
 	</ul>
 
@@ -28,10 +33,12 @@
 			<!-- esta se llena de forma asíncrona con /async/usuarios/todos -->
 		</div>
 		<div id="usuarios-crear" class='tab-pane fade'>
-
 			{% include "Users/modificar.twig" %}
 		</div>
-		
+        <div id="usuarios-crear" class='tab-pane fade'>
+            {% include "Users/oauth.twig" %}
+        </div>
+
 	</div>
 </div>
 {% endblock %}

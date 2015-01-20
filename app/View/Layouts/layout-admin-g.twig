@@ -1,6 +1,8 @@
 
 {{ html.css('styles') }}
 {{ html.css('jasny-bootstrap.min') }}
+{{html.script('jqBootstrapValidation') }}
+{{html.script('userValidator')  }}
 <style>body{background-color: #ffffff}</style>
 
 {% block header %}
@@ -12,7 +14,6 @@
         </h2>
         <div class='col-xs-12 col-md-6 text-center'>
             <h2>{{nombre}} <small class="roleText">{{rol}}</small></h2>
-            <a class='btn btn-md btn-primary' href="#">Preferencias</a>
             <a class='btn btn-md btn-danger' href="users/logout">Cerrar Sesión</a>
 
         </div>
@@ -28,7 +29,7 @@
             {% endblock %}
             <li class="active"><a href="#preguntas" role='tab' data-toggle='tab'>Preguntas</a></li>
             <li><a href="#temas" role='tab' data-toggle='tab'>Temas</a></li>
-            <li><a href="#estadisticas" role='tab' data-toggle='tab'>Estadisticas</a></li>
+            <!--<li><a href="#estadisticas" role='tab' data-toggle='tab'>Estadisticas</a></li>-->
         </ul>
     </nav>
     <section class='container' style='padding-top:2em'>

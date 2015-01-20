@@ -1,0 +1,42 @@
+<div id="alerts">
+    <div class="alert alert-danger alert-dismissible" role="alert" hidden="hidden">
+        <strong>Error!</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" hidden="hidden">
+        <strong>Éxito</strong>
+    </div>
+
+</div>
+
+<form class="form-horizontal" id="form-create-pregunta">
+    <fieldset>
+        <!-- File Chooser-->
+        <div class="form-group" id="fileChooser">
+            <label class="col-md-4 control-label" for="recurso">Selecciona tu archivo JSON</label>
+            <div class="col-md-4 fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Seleccionar</span><span class="fileinput-exists">Cambiar</span><input type="file" name="data[Pregunta][recurso]" id="recurso"></span>
+                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remover</a>
+            </div>
+        </div>
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="btn-enviar"></label>
+            <div class="col-md-4">
+                    <button id="btn-enviar" name="btn-enviar" class="btn btn-success" type="button" role="button" onclick="createOrModElement('preguntas','batch','form-create-pregunta')" >Guardar Cambios</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+<div class="container-fluid" id="error">
+
+</div>
+
+{% block scripts %}
+    {{html.script('management')  }}
+    {{html.script('jasny-bootstrap.min') }}
+{% endblock %}

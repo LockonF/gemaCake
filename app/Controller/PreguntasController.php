@@ -9,6 +9,71 @@
 class PreguntasController extends AppController {
 
     /**
+     * @var array
+     * Configuración del REST
+     */
+
+    public $components = array (
+        'Rest.Rest' => array(
+            'catchredir' => true,
+            'debug'=>2,
+            'actions' => array(
+                'ver' => array(
+                    'extract' => array('preguntas'),
+                ),
+                'verTema' => array(
+                    'extract' => array('preguntas'),
+                ),
+            ),
+            'log' => array(
+                'pretty' => true,
+            ),
+            'ratelimit' => array(
+                'enable' => false
+            ),
+        ),
+    );
+
+
+    /**
+     * Autorización para el REST
+     */
+
+
+    public function beforeFilter () {
+        $this->Auth->allow();
+        if (!$this->Auth->user()) {
+            // Try to login user via REST
+            if ($this->Rest->isActive()) {
+                $this->Auth->autoRedirect = false;
+            }
+        }
+      //  parent::beforeFilter();
+    }
+
+
+    /**
+     * Proporciona preguntas por tema
+     */
+    public function verTema()
+    {
+        $this->request->allowMethod("GET");
+        if($this->request->is("get"))
+        {
+            try{
+                $tema= $this->request->query['tema'];
+                $preguntas = $this->Pregunta->find('all',array('conditions'=>array('Pregunta.id_tema'=>$tema)));
+                $this->set('preguntas', $preguntas);
+            }
+            catch(Exception $e)
+            {
+            }
+
+        }
+    }
+
+
+    /**
      * Proporciona todas las preguntas en existencia
      */
 
@@ -17,6 +82,8 @@ class PreguntasController extends AppController {
         $preguntas= $this->Pregunta->find('all');
         $this->set('preguntas', $preguntas);
     }
+
+
 
     /**
      * Elimina la pregunta de acuerdo a un parámetro AJAX que se localiza en $this->request->data['id']
@@ -68,7 +135,7 @@ class PreguntasController extends AppController {
         if($this->request->is('post'))
         {
             $tema = $this->Pregunta->Tema->find('first',array('conditions'=>array('Tema.id'=>$this->request->data['Pregunta']['id_tema'])));
-            $tema = $tema['Tema']['nombre'];
+            $tema = $tema['Tema']['id'];
             $name= $this->request->data['Pregunta']['recurso']['name'];
             $tempName = $this->request->data['Pregunta']['recurso']['tmp_name'];
 
@@ -105,11 +172,11 @@ class PreguntasController extends AppController {
     {
         $this->autoRender=false;
         $pregunta = $this->Pregunta->find('first',array('conditions'=>array('Pregunta.id'=>$this->request->data['Pregunta']['id'])));
-        $tema = $pregunta['Tema']['nombre'];
+        $tema = $pregunta['Tema']['id'];
 
         if($this->request->data['changeFile']=='true')
         {
-            $this->deleteFile($pregunta['Pregunta']['recurso'],$pregunta['Tema']['nombre']);
+            $this->deleteFile($pregunta['Pregunta']['recurso'],$pregunta['Tema']['id']);
             $name= $this->request->data['Pregunta']['recurso']['name'];
             $tempName = $this->request->data['Pregunta']['recurso']['tmp_name'];
 
@@ -200,6 +267,26 @@ class PreguntasController extends AppController {
         }
 
     }
+
+    public function batch()
+    {
+        if($this->request->is('post'))
+        {
+            $this->autoRender=false;
+            $tempName = $this->request->data['Pregunta']['recurso']['tmp_name'];
+            if(file_exists($tempName))
+            {
+                $myfile = fopen($tempName, "r") or die("");
+                $string = fread($myfile,filesize($tempName));
+                $data = json_decode($string);
+                $this->Pregunta->saveMany($data);
+                fclose($myfile);
+            }
+        }
+
+    }
+
+
 
 
 } 

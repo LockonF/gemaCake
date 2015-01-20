@@ -14,7 +14,7 @@
 		<tr>
 			<td>{{usuario.User.username}}</td>
 			<td>{{usuario.Role.name}}</td>
-			<td>{{usuario.User.password}}</td>
+			<td>{{usuario.Profile.nombre}} {{usuario.Profile.apaterno}} {{usuario.Profile.amaterno}}</td>
 			<td>{{usuario.User.email}}</td>
 			<td>
 				<button class='btn btn-md btn-primary' onclick="$('.ver-usuario').load('Users/modificar',{'id':'{{usuario.User.id}}'})"><span class='glyphicon glyphicon-edit'></span></button>

@@ -9,27 +9,27 @@
 	<div class='container'>
 	<div class='col-xs-4'>
 		<h2>
-			<img src="img/logo.png" class='logo-mini'>
+            {{ html.image('logo.png',{'class':'logo-mini'}) }}
+
 			GEMA
 		</h2>
-		
-		
+
+
 	</div>
 	<div class='col-xs-8'>
-		
+
 		<div class='col-md-12 text-right'>
 			{% block user_info %}
-			<h2>Bienvenido, {{activeUser.nombre}}.</h2>
+            <h2>Bienvenido {{activeUser}} <small class="roleText">{{rol}}</small></h2>
 			<div class='col-md-12 text-right'>
-				<a href='preferencias'  class='btn btn-primary'><span class='glyphicon glyphicon-user'></span> Preferencias</a>
-                <a class='btn btn-md btn-danger' href="users/logout">
+                <a class='btn btn-md btn-danger' href="Users/logout">
 					<span class='glyphicon glyphicon-log-out'></span>
 					Cerrar Sesión</a>
 			</div>
 			{% endblock %}
 		</div>
 </div>
-		
+
 	</div>
 </header>
 <div class='col-md-12' id='navbar-container'>
@@ -38,7 +38,7 @@
 
 		<nav class='col-md-8 text-center'>
 			<ul class='nav nav-pills text-center'>
-				<li class="active"><a href="dashboard" >
+				<li class="active"><a href="Evaluaciones" >
 					<span class='glyphicon glyphicon-dashboard'></span>
 					Menú Principal</a></li>
 				{% block navbar_personal%}
@@ -48,14 +48,14 @@
 
 		{% endblock %}
 
-	</div>	
+	</div>
 
 </div>
 
 <div id='dashboard-contenido' class='container-fluid'>
 	<div class='container'>
 		{% block contenido_dashboard %}
-		
+
 		{% endblock %}
 	</div>
 </div>
