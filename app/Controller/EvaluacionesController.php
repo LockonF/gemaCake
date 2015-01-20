@@ -104,7 +104,10 @@ class EvaluacionesController extends AppController {
                 'fields'=>array('label')
             ));
 
-
+            $evaluaciones = $this->Evaluacion->find('all',array('conditions'=>array(
+                                'Evaluacion.user_id'=>$this->Auth->user('id')),
+                                'order' => 'Evaluacion.created DESC',
+                ));
 
             $newLabels = $this->formatArray($labels);
             $promediosData = $this->formatPromedios($evaluaciones);

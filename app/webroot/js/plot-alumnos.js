@@ -1,7 +1,8 @@
 
 $.get('getDatosAlumno', function(raw_data){
-
+    console.log(raw_data);
     raw_data = jQuery.parseJSON(raw_data);
+
     var dataAvances = {
         labels: raw_data['avances']['labels'],
         datasets: [
