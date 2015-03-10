@@ -230,16 +230,22 @@ class EvaluacionesController extends AppController {
 
         if($this->request->data!=null)
         {
-            foreach ($this->request->data as $key=>$dato) {
+        //Tomamos los keys de las preguntas así como la respuesta seleccionada
+            foreach ($this->request->data as $key=>$respuesta_sel) {
+
+                //En cada categoría buscamos las preguntas
                 foreach ($this->Session->read("Evaluacion.preguntas.categorias") as $keycategoria=>$categoria) {
                         foreach ($categoria['preguntas'] as $keypregunta=>$pregunta) {
+                            //Si nuestro id de pregunta empata con la llave que se le envía
                             if ($pregunta['qid'] == $key) {
 
-                                $dato=intval($dato)-1;
-                                $this->Session->write("Evaluacion.preguntas.categorias.".$keycategoria.".preguntas.".$keypregunta.".respuestas.".$dato.".seleccionada",true);
+                                //Entonces escribe seleccionado como true
+                                $respuesta_sel=intval($respuesta_sel)-1;
+                                $this->Session->write("Evaluacion.preguntas.categorias.".$keycategoria.".preguntas.".$keypregunta.".respuestas.".$respuesta_sel.".seleccionada",true);
+                                //Borra las demás respuestas seleccionadas
                                 for($i = 0;$i<4;$i++)
                                 {
-                                    if($dato!=$i)
+                                    if($respuesta_sel!=$i)
                                     {
                                         $this->Session->write("Evaluacion.preguntas.categorias.".$keycategoria.".preguntas.".$keypregunta.".respuestas.".$i.".seleccionada",false);
                                     }
