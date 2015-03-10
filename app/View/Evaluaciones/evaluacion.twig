@@ -3,6 +3,7 @@
 {%block controles_evaluacion%}
     <h1><strong>Evaluación</strong></h1>
     <a class='btn btn-success' role='button' onclick="$.post('calificar',$('#evaluacion').serialize(),function(data){window.location.replace('evaluaciones');})" >Calificar</a>
+    <a class='btn btn-success' role='button' onclick="$.post('Evaluaciones/guardar',$('#evaluacion').serialize())" >Guardar</a>
     <a class='btn btn-danger' role='button' href='Evaluaciones/index'>Salir</a>
 {%endblock%}
 
@@ -46,6 +47,7 @@
             <input type="radio" name="{{pregunta.qid}}" value="{{loop.index}}"
                    {%if respuesta.seleccionada%}checked{%endif%}
                     >{{respuesta.texto}}
+
 
 
         </label>

@@ -78,7 +78,7 @@ class EvaluacionesController extends AppController {
         }
         else
         {
-            $this->errors("totalPreguntas",$this->getNumPreguntas());
+            //$this->errors("totalPreguntas",$this->getNumPreguntas());
             $this->set("tiempo",150);
             $this->set($this->Session->read("Evaluacion.preguntas"));
         }
@@ -219,6 +219,39 @@ class EvaluacionesController extends AppController {
 
     }
 
+    /**
+     *
+     * Función para guardar, aseguramos la persistencia en el examen
+     */
+
+    public function guardar()
+    {
+        $this->autoRender = false;
+
+        if($this->request->data!=null)
+        {
+            foreach ($this->request->data as $key=>$dato) {
+                foreach ($this->Session->read("Evaluacion.preguntas.categorias") as $keycategoria=>$categoria) {
+                        foreach ($categoria['preguntas'] as $keypregunta=>$pregunta) {
+                            if ($pregunta['qid'] == $key) {
+
+                                $dato=intval($dato)-1;
+                                $this->Session->write("Evaluacion.preguntas.categorias.".$keycategoria.".preguntas.".$keypregunta.".respuestas.".$dato.".seleccionada",true);
+                                for($i = 0;$i<4;$i++)
+                                {
+                                    if($dato!=$i)
+                                    {
+                                        $this->Session->write("Evaluacion.preguntas.categorias.".$keycategoria.".preguntas.".$keypregunta.".respuestas.".$i.".seleccionada",false);
+                                    }
+                                }
+                            }
+                        }
+                }
+
+            }
+        }
+
+    }
 
     /**
      * Funcion para calificar
