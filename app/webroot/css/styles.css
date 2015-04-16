@@ -7,6 +7,11 @@ body{
 	width:100px;
 }
 
+
+.logo-nano{
+    width:50px;
+}
+
 header{
 	background-color:#428bca;
 	color:white;
@@ -121,3 +126,5 @@ footer{
 .bold{
     font-weight:bold;
 }
+
+

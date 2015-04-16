@@ -1,0 +1,54 @@
+{% block stylesheets %}
+    {{ html.css('styles') }}
+    {{ html.css('styles-index') }}
+{% endblock %}
+
+{% block contenido %}
+
+    <header class='container-fluid'>
+        <div class='col-md-4'>
+            <h2>
+                <img src="../img/logo.png" class='logo-mini'>
+                GEMA
+            </h2>
+        </div>
+
+        <div class="col-md-12">
+            <h2 class="text-center">Inicia sesión con tu cuenta GEMA</h2>
+        </div>
+
+        <div class='col-md-12'>
+            <div class='col-md-6 col-md-offset-3'>
+                <form class="form-horizontal" name="login" role="form" action='login' method='post' style='padding-top:1em'>
+                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="User[username]" placeholder="Ingresa tu usuario...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="User[password]" placeholder="Ingresa tu contraseña...">
+                    </div>
+                    <div class="col-md-offset-5">
+
+                        <button type="submit" class="btn btn-success">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <p class="text-center">Recuerda que al iniciar sesión autorizas a la aplicación a acceder a tus datos</p>
+        </div>
+
+    <footer class='container-fluid'>
+        <div class='col-md-12 text-center'>Instituto Politécnico Nacional, 2014
+        </div>
+    </footer>
+
+
+
+{% endblock %}

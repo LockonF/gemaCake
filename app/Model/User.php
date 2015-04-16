@@ -56,8 +56,6 @@ class User extends AppModel {
         ),
         'role'=>array(
             'required'=>array(
-                'rule'=>array('inList',array('1','2','3')),
-                'message'=>'Se requiere un rol válido',
                 'allowEmpty'=>'false'
             )
         ),

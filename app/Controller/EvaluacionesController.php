@@ -8,6 +8,43 @@
 
 class EvaluacionesController extends AppController {
 
+    public $components = array (
+        'Rest.Rest' => array(
+            'catchredir' => true,
+            'debug'=>2,
+            'actions' => array(
+                'evaluacion' => array(
+                    'extract' => array('evaluacion'),
+                ),
+
+                'getDatosAlumno' => array(
+                    'extract' => array('response'),
+                )
+            ),
+            'log' => array(
+                'pretty' => true,
+            ),
+            'ratelimit' => array(
+                'enable' => false
+            ),
+        ),
+    );
+
+
+    public function beforeFilter () {
+        $this->Auth->allow();
+        if (!$this->Auth->user()) {
+            // Try to login user via REST
+            if ($this->Rest->isActive()) {
+                $this->Auth->autoRedirect = false;
+            }
+        }
+        //  parent::beforeFilter();
+    }
+
+
+
+
     public function isAuthorized($user=null)
     {
         if(isset($user) && $user['role_id']!=3)
@@ -64,6 +101,7 @@ class EvaluacionesController extends AppController {
         $this->setUserName();
         $this->layout="layout-main";
 
+
         if($this->Session->read("Evaluacion.started")==false)
         {
             $this->set("x",$this->getNumPreguntas());
@@ -75,11 +113,16 @@ class EvaluacionesController extends AppController {
 
             $this->Session->write("Evaluacion.started",true);
             $this->Session->write("Evaluacion.preguntas",$preguntas);
+            $evaluacion=  $this->Session->read("Evaluacion.preguntas");
+            $this->set("evaluacion",$evaluacion);
+
         }
         else
         {
-            //$this->errors("totalPreguntas",$this->getNumPreguntas());
+            $this->set("totalPreguntas",$this->getNumPreguntas());
             $this->set("tiempo",150);
+            $evaluacion=  $this->Session->read("Evaluacion.preguntas");
+            $this->set("evaluacion",$evaluacion);
             $this->set($this->Session->read("Evaluacion.preguntas"));
         }
 
@@ -93,7 +136,6 @@ class EvaluacionesController extends AppController {
 
     public function getDatosAlumno()
     {
-        $this->autoRender=false;
         if($this->request->is('get'))
         {
             $this->loadModel('Materia');
@@ -127,8 +169,8 @@ class EvaluacionesController extends AppController {
                                   "data"=>$promediosData['data']
                         )
             );
-            $jsonResponse = json_encode($jsonResponse);
-            echo $jsonResponse;
+
+            $this->set("response",$jsonResponse);
         }
     }
 
@@ -468,10 +510,10 @@ class EvaluacionesController extends AppController {
             {
                 $correcta = (int) $pregunta['Pregunta']['opcc'];
                 $opciones = array(
-                    $pregunta['Pregunta']['opc1'],
-                    $pregunta['Pregunta']['opc2'],
-                    $pregunta['Pregunta']['opc3'],
-                    $pregunta['Pregunta']['opc4']);
+                    utf8_decode($pregunta['Pregunta']['opc1']),
+                    utf8_decode($pregunta['Pregunta']['opc2']),
+                    utf8_decode($pregunta['Pregunta']['opc3']),
+                    utf8_decode($pregunta['Pregunta']['opc4']));
                 $respuestasArray=null;
                 for($i=0;$i<4;$i++)
                 {
@@ -489,7 +531,7 @@ class EvaluacionesController extends AppController {
                 $auxPreguntasArray[]=
                     array(
                         'qid'=>$pregunta['Pregunta']['id'],
-                        'titulo'=>$pregunta['Pregunta']['oracion'],
+                        'titulo'=>utf8_decode($pregunta['Pregunta']['oracion']),
                         'recurso'=>array(
                             "titulo"=>$pregunta['Pregunta']['recurso'],
                             "referencia"=>$pregunta['Pregunta']['recurso']
@@ -504,7 +546,7 @@ class EvaluacionesController extends AppController {
             if(!empty($auxPreguntasArray))
             {
                 $validArray[]= array(
-                    'nombre'=>$materia['Materia']['nombre'],
+                    'nombre'=>utf8_decode($materia['Materia']['nombre']),
                     'codigo'=>$materia['Materia']['label'],
                     'totalPreguntas'=>$materia['Materia']['numpreguntas'],
                     'preguntas'=>$auxPreguntasArray

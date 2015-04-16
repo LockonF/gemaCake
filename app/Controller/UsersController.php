@@ -31,7 +31,8 @@ class UsersController extends AppController{
 
         'Auth' => array(
             'authenticate' =>
-                array('Form' => array(
+                array(
+                    'Form' => array(
                     'passwordHasher'=>'Blowfish',
                     'userModel' => 'User',
                     'fields' => array(
@@ -54,49 +55,7 @@ class UsersController extends AppController{
 
     }
 
-    /**
-     *OAuth Related Functions: Create
-     */
-    public function createOAuthClient()
-    {
-        if($this->request->is("get"))
-        {
-            if(trim($this->request->query["uri"]==""))
-            {
-                $redirectURI = "/cakephp/users/demoCode";
-            }
-            else{
-                $redirectURI = $this->request->query["uri"];
-            }
-            $client = $this->OAuth->Client->add($redirectURI);
-            $client['Client']['uri'] = "/oauth/authorize?response_type=code&client_id=".$client['Client']['client_id']."&redirect_url=/cakephp/users/demoCode.json";
-            $this->set('client',$client['Client']);
-            $this->Session->write(array("user"=>
-                array("id"=>$client['Client']['client_id'],
-                    "secret"=>$client['Client']['client_secret']
-                )));
-            $redirectURI="";
-        }
 
-    }
-
-    public function demoCode()
-    {
-        $this->autoRender=false;
-        echo "Please visit this url: /oauth/token?grant_type=authorization_code&code=".$this->request->query['code']."&client_id=xxxx&client_secret=xxxx";
-        $this->set("code",$this->request->query['code']);
-
-        //$client_id =$this->Session->read("user.id");
-        //$client_secret = $this->Session->read("user.secret");
-        //$this->redirect("/oauth/token?grant_type=authorization_code&code=".$this->request->query['code']."from_above&client_id=".$client_id."&client_secret=".$client_secret);
-
-
-    }
-
-    public function demoGetToken()
-    {
-        $this->autoRender=false;
-    }
 
 
 
@@ -133,7 +92,6 @@ class UsersController extends AppController{
                 {
                     $this->Session->delete("Query");
                     return $this->redirect(array('plugin'=>'oauth','controller'=>'','action'=>'authorize',"?"=>$query));
-
                 }
                 return $this->redirect($this->Auth->redirect());
             }

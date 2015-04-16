@@ -22,7 +22,12 @@ class OAuthController extends OAuthAppController {
 
 	public $uses = array('Users');
 
-	public $helpers = array('Form');
+    public $helpers = array(
+        'Session',
+        'Html' => array('className' => 'BoostCake.BoostCakeHtml'),
+        'Form' => array('className' => 'BoostCake.BoostCakeForm'),
+        'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
+    );
 
 	private $blackHoled = false;
 
@@ -51,12 +56,16 @@ class OAuthController extends OAuthAppController {
  *
  */
 	public function authorize() {
-		if (!$this->Auth->loggedIn()) {
-			$this->redirect(array('plugin'=>null,'controller'=>'users','action' => 'login', '?' => $this->request->query));
-		}
 
-		if ($this->request->is('post')) {
-			$this->validateRequest();
+            if (!$this->Auth->loggedIn()) {
+                $this->blackHoled=false;
+                $this->redirect(array('plugin'=>null,'controller'=>'api','action' => 'login', '?' => $this->request->query));
+            }
+
+        if ($this->request->is('post')) {
+
+			//Token problem for same client
+			//$this->validateRequest();
 
 			$userId = $this->Auth->user('id');
 
@@ -66,12 +75,19 @@ class OAuthController extends OAuthAppController {
 			}
 
 			//Did they accept the form? Adjust accordingly
-			$accepted = $this->request->data['accept'] == 'Yep';
-			try {
-				$this->OAuth->finishClientAuthorization($accepted, $userId, $this->request->data['Authorize']);
-			} catch (OAuth2RedirectException $e) {
-				$e->sendHttpResponse();
-			}
+			$accepted = $this->request->data['accept'];
+            if($accepted=='Si')
+            {
+                try {
+                    $this->OAuth->finishClientAuthorization($accepted, $userId, $this->request->data['Authorize']);
+                } catch (OAuth2RedirectException $e) {
+                    $e->sendHttpResponse();
+                }
+            }
+            else
+            {
+                $this->redirect(array('plugin'=>null,'controller'=>'users','action' => 'login'));
+            }
 		}
 
 		// Clickjacking prevention (supported by IE8+, FF3.6.9+, Opera10.5+, Safari4+, Chrome 4.1.249.1042+)
