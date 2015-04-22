@@ -7,12 +7,8 @@
  */
 
 class Resultado extends AppModel{
-    public $useTable = "resultados";
+    public $useTable = "examenResultado";
     public $belongsTo = array(
-       'Tema'=>array(
-           "className"=>'Tema',
-           'foreignKey'=>'tema_id'
-       ),
         'Evaluacion'=>
         array(
             "className"=>'Evaluacion',
@@ -20,12 +16,6 @@ class Resultado extends AppModel{
         ),
     );
 
-    public $hasMany = array(
-      'Incorrecta'=>array(
-          'className'=>'Incorrecta',
-          'foreignKey'=>"resultado_id"
-      )
-    );
 
 
 } 

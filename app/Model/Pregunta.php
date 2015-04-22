@@ -9,12 +9,22 @@
 
 
 class Pregunta extends AppModel{
+    public $name = 'Pregunta';
+
+
     public $useTable = 'preguntas';
 
     public $belongsTo = array(
         'Tema'=>array(
             'classname'=>'Tema',
-            'foreignKey'=>'id_tema'
+            'foreignKey'=>'tema_id'
+        )
+    );
+
+    public $hasOne = array(
+        'PreguntasControl'=>array(
+            'className'=>'PreguntasControl',
+            'foreignKey'=>'pregunta_id'
         )
     );
 

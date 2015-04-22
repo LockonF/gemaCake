@@ -28,6 +28,7 @@
 
 Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 Router::connect('/', array('controller' => 'users', 'action' => 'login'));
+Router::connect('/api/gencode.json', array('controller' => 'api', 'action' => 'gencode'));
 
 
 Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));

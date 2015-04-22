@@ -8,6 +8,7 @@
 
 class Materia extends AppModel {
     public $useTable = 'materias';
+    public $name = "Materia";
 
     public $validate = array(
         'nombre'=>array(
@@ -15,18 +16,14 @@ class Materia extends AppModel {
                     'rule'=>array('isunique'),
                     'message'=>'Materia ya existente'
                 )
-        ),
-        'numPreguntas'=>array(
-                'numerico'=>array(
-                    'rule'=>array('custom','/^0|[1-9]\d*$/'),
-                    'message'=>'Solo se acepta numeros'
-                )
         )
+
     );
 
-    public $hasmany = array(
-        'Tema'=>array(
+    public $hasMany = array(
+        "Tema"=>array(
             'className'=>'Tema',
+            'foreignKey'=>'materia_id'
         )
     );
 

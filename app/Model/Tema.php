@@ -11,12 +11,21 @@ class Tema extends AppModel{
     public $belongsTo = array('Materia'=>
         array(
             "className"=>"Materia",
-            "foreignKey"=>"id_materia"
+            "foreignKey"=>"materia_id"
         ));
     public $hasMany = array('Pregunta'=>
         array(
             "className"=>'Pregunta',
-            'foreignKey'=>'id_tema'
+            'foreignKey'=>'tema_id'
+        )
+    );
+
+    public $hasAndBelongsToMany = array(
+        'Competencia'=>array(
+            'className'=>'Competencia',
+            'joinTable'=>'temaCompetencia',
+            'unique'=>'keepExisting',
+            'with'=>'TemaCompetencia'
         )
     );
 } 
