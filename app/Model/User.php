@@ -7,9 +7,27 @@
  */
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 App::uses('AppModel', 'Model');
+App::uses('Auth', 'Controller/Component');
+
 
 
 class User extends AppModel {
+
+    public $components = array(
+        'Auth' => array(
+            'authenticate' =>
+                array(
+                    'Form' => array(
+                        'passwordHasher'=>'Blowfish',
+                        'userModel' => 'User',
+                        'fields' => array(
+                            'username' => 'username',
+                            'password' => 'password'
+                        )
+                    ))
+
+        )
+    );
 
     /*****Validaciones******/
 
@@ -89,4 +107,5 @@ class User extends AppModel {
         }
         return true;
     }
+
 } 

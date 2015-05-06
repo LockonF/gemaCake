@@ -87,7 +87,16 @@ class ApiController extends AppController{
                     'resultadosByTema' => array(
                         'extract' => array('data'),
                     ),
+                    'generateEvaluacion' => array(
+                        'extract' => array('data'),
+                    ),
                     'createEvaluacion' => array(
+                        'extract' => array('data'),
+                    ),
+                    'evaluar' => array(
+                        'extract' => array('data'),
+                    ),
+                    'evaluacionToInferencia' => array(
                         'extract' => array('data'),
                     ),
                     'allTemaCompetencia' => array(
@@ -114,7 +123,7 @@ class ApiController extends AppController{
     public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow();
-        $this->OAuth->allow(array('createOAuthClient','genCode','demoGetToken','login'));
+        $this->OAuth->allow(array('createOAuthClient','genCode','demoGetToken','login','token'));
 
     }
 
@@ -706,60 +715,77 @@ class ApiController extends AppController{
         if($this->request->is('post'))
         {
             $this->loadModel('Evaluacion');
-            $this->loadModel('TemaCompetencia');
-            $this->Evaluacion->create();
-            $this->request->data['Evaluacion']['user_id'] = $this->OAuth->user()['id'];
-            $this->request->data['Evaluacion']['puntaje'] = 0;
-            $evaluacionControl = false;
 
-            if(!isset($this->request->data['setLater']))
-            {
-                $this->request->data['setLater']=false;
-            }
+            $evaluaciones = $this->Evaluacion->findAllByUserIdAndFinished($this->OAuth->user()['id'],0);
 
-            if(!isset($this->request->data['Prototipo']) && $this->request->data['setLater'] == false)
+            if(count($evaluaciones)==0)
             {
-                $temas_competencias = $this->TemaCompetencia->find('all');
-                $counter = 0;
-                foreach($temas_competencias as $dataTC)
+                $this->loadModel('TemaCompetencia');
+                $this->Evaluacion->create();
+                $this->request->data['Evaluacion']['user_id'] = $this->OAuth->user()['id'];
+                $this->request->data['Evaluacion']['puntaje'] = 0;
+                $this->request->data['Evaluacion']['finished'] = 0;
+                $this->request->data['Evaluacion']['type'] = 'P';
+                $evaluacionControl = false;
+
+                if(!isset($this->request->data['setLater']))
                 {
-                    $this->request->data['Prototipo'][$counter]['tema_competencia_id'] = $dataTC['TemaCompetencia']['id'];
-                    $this->request->data['Prototipo'][$counter]['numpreguntas'] = $dataTC['TemaCompetencia']['numpreguntas'];
-                    $this->request->data['Prototipo'][$counter]['dificultad'] = 1;
-                    $counter++;
+                    $this->request->data['setLater']=false;
                 }
-                $evaluacionControl = true;
 
-            }
-
-            if($this->Evaluacion->saveAll($this->request->data))
-            {
-                if($evaluacionControl==true)
+                if(!isset($this->request->data['Prototipo']) && $this->request->data['setLater'] == false)
                 {
-                    $data[0]= 'Success';
-                    $data[1]= 'Creaste una evaluación de control';
+                    $temas_competencias = $this->TemaCompetencia->find('all');
+                    $counter = 0;
+                    $this->request->data['Evaluacion']['type'] = 'S';
+                    foreach($temas_competencias as $dataTC)
+                    {
+
+                        $this->request->data['Prototipo'][$counter]['tema_competencia_id'] = $dataTC['TemaCompetencia']['id'];
+                        $this->request->data['Prototipo'][$counter]['numpreguntas'] = $dataTC['TemaCompetencia']['numpreguntas'];
+                        $this->request->data['Prototipo'][$counter]['dificultad'] = 1;
+
+                        $counter++;
+                    }
+                    $evaluacionControl = true;
+
                 }
-                else{
-                    if($this->request->data['setLater']==true)
+
+                if($this->Evaluacion->saveAll($this->request->data))
+                {
+                    if($evaluacionControl==true)
                     {
                         $data[0]= 'Success';
-                        $data[1]= 'Creaste una evaluación sin prototipos';
+                        $data[1]= 'Creaste una evaluación de control';
                     }
-                    else
-                    {
-                        $data[0]= 'Success';
-                        $data[1]= 'Creaste una evaluación con prototipos';
+                    else{
+                        if($this->request->data['setLater']==true)
+                        {
+                            $data[0]= 'Success';
+                            $data[1]= 'Creaste una evaluación sin prototipos';
+                        }
+                        else
+                        {
+                            $data[0]= 'Success';
+                            $data[1]= 'Creaste una evaluación con prototipos';
+                        }
+
                     }
 
+                    $this->set('data',$data);
                 }
-
-                $this->set('data',$data);
+                else
+                {
+                    $this->set('data','No se pudo guardar la evaluación');
+                }
             }
             else
             {
-                $this->set('data','No se pudo guardar la evaluación');
+                $this->set('data',array('error'=>'406','message'=>'Not Acceptable','cause'=>utf8_decode('Solo puede haber una evaluación sin terminar')));
             }
-        }
+            }
+
+
     }
 
     /**
@@ -772,23 +798,255 @@ class ApiController extends AppController{
         {
             $this->loadModel('Prototipo');
             $this->loadModel('Evaluacion');
+            $this->loadModel('Pregunta');
+            $this->loadModel('Materia');
+            $this->loadModel('Tema');
+
             $evaluacion = $this->Evaluacion->find('first',array(
-                'conditions'=>array('Evaluacion.user_id'=>$this->OAuth->user()['id']),
-                'fields'=>array('Evaluacion.id'),
+                'conditions'=>array('Evaluacion.user_id'=>$this->OAuth->user()['id'], 'Evaluacion.finished'=>0),
+                'fields'=>array('Evaluacion.id','Evaluacion.created','Evaluacion.type'),
                 'order' => array('Evaluacion.created DESC'),
                 'recursive'=>-1
             ));
 
 
-            $prototipos = $this->Prototipo->find('all',array(
-                'conditions'=>array("examen_id"=>$evaluacion['Evaluacion']['id'])
+            if(count($evaluacion)>0)
+            {
+                $prototipos = $this->Prototipo->find('all',array(
+                    'conditions'=>array("examen_id"=>$evaluacion['Evaluacion']['id'])
 
-            ));
+                ));
 
-            $this->set('data','data');
+                $examen = array();
+                $tempPreguntas= array();
+                $oldMateria=0;
+                $oldTema=0;
+                $joins = array(
+                    array(
+                        'table'=>'preguntas',
+                        'alias'=>'Pregunta',
+                        'type'=>'INNER',
+                        'conditions'=>array('Pregunta.tema_id = Tema.id')
+                    ),
+                );
+
+                foreach($prototipos as $key=>$prototipo)
+                {
+                    $competencia = $prototipo['TemaCompetencia']['competencia_id'];
+                    $preguntas=$this->Pregunta->find('formattedArray',array(
+                        'conditions'=>array(
+                            'Pregunta.tema_id'=>$prototipo['TemaCompetencia']['tema_id'],
+                            'Pregunta.competencia_id'=>$competencia,
+                            'Pregunta.dificultad'=>$prototipo['Prototipo']['dificultad']
+                        ),
+                        'limit'=>$prototipo['TemaCompetencia']['numpreguntas'],
+                        'order'=>'rand()',
+                        'recursive'=>-1,
+
+                    ));
+
+                    $tema = $this->Tema->find('first', array(
+                        'conditions'=>array(
+                            'Tema.id'=>$prototipo['TemaCompetencia']['tema_id']),
+                        'recursive'=>0,
+                        'fields'=>array('Tema.*','Materia.*')
+                    ));
+
+
+                    if($oldTema!=$tema['Tema']['id'])
+                    {
+                        if(count($examen)==0)
+                        {
+                            $examen['materias']=array($tema['Materia']);
+                            $examen['materias'][0]['preguntas'] = array();
+                            $tempPreguntas= array_merge($tempPreguntas,$preguntas);
+                        }
+                        else
+                        {
+                            if($tema['Materia']['id']!=$oldMateria)
+                            {
+                                $examen['materias'][count($examen['materias'])]=$tema['Materia'];
+                                $examen['materias'][count($examen['materias'])-2]['preguntas']=$tempPreguntas;
+                                $tempPreguntas = array();
+                                $tempPreguntas = array_merge($tempPreguntas,$preguntas);
+                            }
+                            else
+                            {
+                                $tempPreguntas= array_merge($tempPreguntas,$preguntas);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $tempPreguntas= array_merge($tempPreguntas,$preguntas);
+                    }
+
+                    if($key==count($prototipos)-1)
+                    {
+                        if($tema['Materia']['id']!=$examen['materias'][count($examen['materias'])-1]['id'])
+                        {
+                            $examen['materias'][count($examen['materias'])]=$tema['Materia'];
+                            $examen['materias'][count($examen['materias'])-2]['preguntas']=$preguntas;
+                        }
+                        else
+                        {
+                            $examen['materias'][count($examen['materias'])-1]['preguntas']=$tempPreguntas;
+                        }
+                    }
+
+
+                    $oldMateria = $tema['Materia']['id'];
+                    $oldTema = $tema['Tema']['id'];
+
+
+
+
+
+                }
+                $examen['id']=$evaluacion['Evaluacion']['id'];
+                $examen['tipo']=$evaluacion['Evaluacion']['type'];
+                $examen['fechaLimite']=strtotime($evaluacion['Evaluacion']['created'])+ 60*3;
+
+                $this->set('data',$examen);
+
+            }
+            else
+            {
+                $this->set('data',array("error"=>'500','message'=>'Internal Server Error','cause'=>utf8_decode('No existe evaluación')));
+            }
 
         }
+
+
     }
+
+    /**
+     *  Método para evaluar()
+     *
+     */
+
+    public function evaluar()
+    {
+        if($this->request->is('post'))
+        {
+            $this->loadModel('Pregunta');
+            $this->loadModel('PreguntasControl');
+            $this->loadModel('Resultado');
+            $this->loadModel('Evaluacion');
+            $count = 0;
+            $examen = $this->request->data['id'];
+            $materias = $this->request->data['materias'];
+            foreach($materias as $materia)
+            {
+                foreach($materia['preguntas'] as $pregunta)
+                {
+                    $id = $pregunta['qid'];
+                    $selected = (isset($pregunta['sel']) ?  intval($pregunta['sel'])+1 : null);
+                    $result = $this->Pregunta->evaluate($id,$selected);
+                    if($result)
+                    {
+                        $this->PreguntasControl->increaseBuenas($id);
+                        $count++;
+                        $this->Resultado->createResult($id,1,$examen,$selected);
+
+                    }
+                    else
+                    {
+                        $this->PreguntasControl->increaseMalas($id);
+                        $this->Resultado->createResult($id,0,$examen,$selected);
+                    }
+                }
+            }
+            $this->Evaluacion->finishEvaluacion($examen,$count);
+            $this->set('data',$count);
+        }
+    }
+
+
+    public function evaluacionToInferencia()
+    {
+        if($this->request->is('post'))
+        {
+            $this->loadModel('Resultado');
+            $this->loadModel('Evaluacion');
+            $this->loadModel('Tema');
+            $this->loadModel('Materia');
+            $this->loadModel('Parametro');
+
+            $parametros = $this->Parametro->find('all');
+            array_walk($parametros,function(&$value,&$key){
+               $value['id']=  $value['Parametro']['id'];
+               $value['dificultad']=  $value['Parametro']['dificultad'];
+               $value['parametro']=  $value['Parametro']['parametro'];
+               $value['porcentaje']=  $value['Parametro']['porcentaje'];
+               unset($value['Parametro']);
+            });
+
+                $materias = array_values($this->Materia->find('all',array(
+                'fields'=>array('Materia.id'),
+                'order' => 'Materia.id'
+            )));
+            array_walk($materias,function(&$value,&$key){
+                $value['id'] = $value['Materia']['id'];
+                for($i = 0; $i<count($value['Tema']);$i++)
+                {
+                    $value['Temas'][$i]= array('id'=>$value['Tema'][$i]['id'],'correctas'=>0,'totales'=>0);
+                }
+                unset($value['Materia'],$value['Tema']);
+
+            });
+
+            $results = $this->Evaluacion->find('first',array(
+                'fields'=> array('Evaluacion.id'),
+                'conditions'=> array('Evaluacion.user_id'=>$this->OAuth->user()['id'],'Evaluacion.finished'=>'1'),
+                'order' => 'Evaluacion.created DESC',
+                'limit' => '1',
+                'recursive'=>-1
+            ));
+
+            $results = $this->Resultado->find('motor',array('conditions'=>array('Evaluacion.id'=>$results['Evaluacion']['id'])));
+            foreach($results as $result)
+            {
+
+                $keyMateria = array_search($result['materia'],array_column($materias,'id'));
+                $keyTema = array_search($result['tema'],array_column($materias[$keyMateria]['Temas'],'id'));
+                $keyParametro = array_search($result['dificultad'],array_column($parametros,'dificultad'));
+
+                if($result['correcta'])
+                {
+                    $materias[$keyMateria]['Temas'][$keyTema]['correctas']+=$parametros[$keyParametro]['parametro'];
+                }
+                $materias[$keyMateria]['Temas'][$keyTema]['totales']+=$parametros[$keyParametro]['parametro'];
+            }
+
+            $results = array();
+            foreach($materias as $materia)
+            {
+                $results['materias'][$materia['id']] = array();
+                foreach($materia['Temas'] as $tema)
+                {
+
+                    if(($tema['correctas']/$tema['totales'])*100 >= 60 && $tema['totales']!=0)
+                    {
+                        $results['materias'][$materia['id']][]=1;
+                    }
+                    else
+                    {
+                        $results['materias'][$materia['id']][] = 0;
+                    }
+                }
+
+            }
+
+            $results['alumno']= $this->OAuth->user()['id'];
+
+            $this->set('data',$results);
+        }
+
+    }
+
+
+
 
 
     /**

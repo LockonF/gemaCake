@@ -10,6 +10,7 @@
 
 class Pregunta extends AppModel{
     public $name = 'Pregunta';
+    public $findMethods = array('formattedArray' =>  true);
 
 
     public $useTable = 'preguntas';
@@ -38,4 +39,34 @@ class Pregunta extends AppModel{
         }
         return false;
     }
+
+    public function _findFormattedArray ($state, $query, $results)
+    {
+        if ($state === 'before') {
+            return $query;
+        }
+        array_walk($results, function(&$value, $key){
+            $value=$value['Pregunta'];
+            $value['respuestas'] = array($value['opc1'],$value['opc2'],$value['opc3'],$value['opc4']);
+            $value['pregunta'] = utf8_decode($value['oracion']);
+            unset($value['opc1'],$value['opc2'],$value['opc3'],$value['opc4']);
+
+            unset($value['tema_id'],$value['dificultad'],$value['opcc'],$value['competencia_id'],$value['just'],$value['oracion']);
+
+        });
+
+        return $results;
+    }
+
+    public function evaluate($id,$selected)
+    {
+        $correct = $this->find('first',array(
+            'conditions'=>array('Pregunta.id'=>$id),
+            'fields'=>'opcc'
+        ));
+        if(intval($correct['Pregunta']['opcc']) == $selected)
+            return true;
+        return false;
+    }
+
 } 

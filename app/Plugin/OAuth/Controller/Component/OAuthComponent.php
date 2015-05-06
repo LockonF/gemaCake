@@ -21,6 +21,8 @@ App::uses('Router', 'Routing');
 App::uses('Security', 'Utility');
 App::uses('Hash', 'Utility');
 App::uses('AuthComponent', 'Controller');
+App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
+
 
 App::import('Vendor', 'oauth2-php/lib/OAuth2');
 App::import('Vendor', 'oauth2-php/lib/IOAuth2Storage');
@@ -29,6 +31,8 @@ App::import('Vendor', 'oauth2-php/lib/IOAuth2GrantUser');
 App::import('Vendor', 'oauth2-php/lib/IOAuth2GrantCode');
 
 class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2GrantCode {
+
+
 
 /**
  * AccessToken object.
@@ -44,11 +48,13 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  */
 	protected $allowedActions = array('token', 'authorize', 'login');
 
+
+
 /**
  * An array containing the model and fields to authenticate users against
  *
  * Inherits theses defaults:
- *
+
  * $this->OAuth->authenticate = array(
  *	'userModel' => 'User',
  *	'fields' => array(
@@ -553,14 +559,20 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  * @param type $password
  */
 	public function checkUserCredentials($client_id, $username, $password) {
-		$user = $this->User->find('first', array(
+
+
+        $user = $this->User->find('first', array(
 			'conditions' => array(
 				$this->authenticate['fields']['username'] => $username,
-				$this->authenticate['fields']['password'] => AuthComponent::password($password)
 			),
 			'recursive' => -1
 		));
-		if ($user) {
+
+        $hashedPassword = Security::hash($password,'blowfish',$user['User']['password']);
+
+        $match = strcmp($hashedPassword,$user['User']['password']);
+
+		if ($match==0) {
 			return array('user_id' => $user['User'][$this->User->primaryKey]);
 		}
 		return false;

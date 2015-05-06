@@ -29,6 +29,21 @@ class Evaluacion extends AppModel {
 
     );
 
+    public function finishEvaluacion($id,$puntaje)
+    {
+        $db = $this->getDataSource();
+        $query = "UPDATE examenes
+                  SET puntaje =".$db->value($puntaje,'int').",
+                  finished = 1
+                  WHERE ID=".$db->value($id, 'int');
+        if($this->query($query))
+        {
+            return true;
+        }
+        return false;
+
+    }
+
 
 
 

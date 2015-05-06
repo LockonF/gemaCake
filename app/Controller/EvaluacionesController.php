@@ -57,42 +57,47 @@ class EvaluacionesController extends AppController {
     {
         $this->setUserName();
         $this->set('evaluacion_activa',$this->Session->read("Evaluacion.started"));
-        $promedio = 0;
         $this->layout="layout-main";
+        $this->loadModel("Resultado");
         $this->loadModel("Evaluacion");
-
+        $this->Resultado->virtualFields['promedio'] = 0;
         $user_id = $this->Auth->user('id');
-        $evaluaciones = $this->Evaluacion->find('all', array('conditions' => array('Evaluacion.user_id' => $user_id)));
+        $promedio=0;
+
+        $options['joins'] = array(
+          array(
+              'table'=>'Users',
+              'alias'=>'USER',
+              'type'=>'INNER',
+              'conditions'=>array('Evaluacion.user_id=User.id')
+          ),
+          array(
+              'table'=>'examenResultado',
+              'alias'=>'Resultado',
+              'type'=>'INNER',
+              'conditions'=>array('Resultado.examen_id=Evaluacion.id')
+          ),
+          array(
+              'table'=>'preguntas',
+              'alias'=>'Pregunta',
+              'type'=>'INNER',
+              'conditions'=>array('Pregunta.id=Resultado.pregunta_id')
+          ),
+        );
+        $options['conditions']=array('Evaluacion.user_id'=>$user_id);
+        $options['group']=array('Evaluacion.id');
+        $options['fields']=array('Evaluacion.id','Evaluacion.created AS fecha','SUM(Resultado.correcta) as Resultado__promedio');
+        $options['recursive']=-1;
+        $options['order']= array('Evaluacion.created DESC');
+
+        $evaluaciones = $this->Evaluacion->find('all',$options);
         foreach($evaluaciones as $evaluacion)
         {
-            $promedio =$promedio+$evaluacion['Evaluacion']['puntaje'];
-        }
-        if(count($evaluaciones)!=0)
-        {
-            $promedio= $promedio/count($evaluaciones);
+            $promedio += intval($evaluacion['Resultado']['promedio']);
         }
 
-        $this->set("promedio",$promedio);
-
-        $lastEvaluaciones = $this->Evaluacion->find('all', array(
-            'conditions' => array('Evaluacion.user_id' => $user_id
-            ),
-            'fields'=> array('Evaluacion.created AS fecha','Evaluacion.puntaje AS promedio'),
-            'group by' => 'Evaluacion.user_id',
-            'order' => 'Evaluacion.created DESC',
-            'limit'=> '3'
-        ));
-
-        $eval = array();
-
-        foreach($lastEvaluaciones as $lastEvaluacion)
-        {
-            $date = new DateTime($lastEvaluacion['Evaluacion']['fecha']);
-
-            $eval[] = array("id"=>$lastEvaluacion['Evaluacion']['id'],"fecha"=>$date->format('d-m-Y'),"promedio"=>$lastEvaluacion['Evaluacion']['promedio']);
-        }
-
-        $this->set("ultimos_resultados",$eval);
+        $this->set("promedio",$promedio/count($evaluaciones));
+        $this->set("ultimos_resultados",$evaluaciones);
     }
 
 
@@ -132,43 +137,144 @@ class EvaluacionesController extends AppController {
     }
 
 
-
-
+    /**
+     * Funcion para las gráficas
+     */
     public function getDatosAlumno()
     {
         if($this->request->is('get'))
         {
+            //Carga de modelos
             $this->loadModel('Materia');
             $this->loadModel('Evaluacion');
+            $this->loadModel("Resultado");
+            $this->Resultado->virtualFields['promedio'] = 0;
+
+            //Arrays Auxiliares
+            $ultimosResultados = array();
+            $arrayMaterias = $this->Materia->find('list',array('fields'=>'Materia.id'));
+            $labels = $this->Materia->find('list',array('fields'=>'Materia.label'));
+
+            //Funcion para poner en default las materias
+            array_walk($arrayMaterias, function(&$value, $key){
+                    $value=0;
+            });
 
 
-            $labels = $this->Materia->find('list',array(
-                'fields'=>array('label')
-            ));
-
-            $evaluaciones = $this->Evaluacion->find('all',array('conditions'=>array(
-                                'Evaluacion.user_id'=>$this->Auth->user('id')),
-                                'order' => 'Evaluacion.created DESC',
-                ));
-
-            $newLabels = $this->formatArray($labels);
-            $promediosData = $this->formatPromedios($evaluaciones);
-
-            $ultimosResultados = $this->getLastEvalsResults($evaluaciones,count($newLabels));
-
-
-
-            $jsonResponse = array("avances"=>array(
-                                 "labels"=>$newLabels,
-                                 "periodos"=>array(
-                                        "anterior"=>$ultimosResultados['anterior'],
-                                        "actual"=>$ultimosResultados['actual'])),
-
-                        "promedios"=>array(
-                                  "labels"=>$promediosData['labels'],
-                                  "data"=>$promediosData['data']
-                        )
+            //Opciones de Queries para encontrar evaluaciones
+            $options['joins'] = array(
+                array(
+                    'table'=>'Users',
+                    'alias'=>'USER',
+                    'type'=>'INNER',
+                    'conditions'=>array('Evaluacion.user_id=User.id')
+                ),
+                array(
+                    'table'=>'examenResultado',
+                    'alias'=>'Resultado',
+                    'type'=>'INNER',
+                    'conditions'=>array('Resultado.examen_id=Evaluacion.id')
+                ),
+                array(
+                    'table'=>'preguntas',
+                    'alias'=>'Pregunta',
+                    'type'=>'INNER',
+                    'conditions'=>array('Pregunta.id=Resultado.pregunta_id')
+                ),
+                array(
+                    'table'=>'temas',
+                    'alias'=>'Tema',
+                    'type'=>'INNER',
+                    'conditions'=>array('Tema.id=Pregunta.tema_id')
+                ),
+                array(
+                    'table'=>'materias',
+                    'alias'=>'Materia',
+                    'type'=>'INNER',
+                    'conditions'=>array('Materia.id=Tema.materia_id')
+                ),
             );
+            $options['group']=array('Evaluacion.id');
+            $options['fields']=array('Evaluacion.id','Evaluacion.created AS fecha','SUM(Resultado.correcta) as Resultado__promedio');
+            $options['recursive']=-1;
+            $options['order']= array('Evaluacion.created DESC');
+            $options['conditions']= array('User.id'=>$this->Auth->user('id'));
+
+            $evaluaciones = $this->Evaluacion->find('all',$options);
+
+
+
+            //Si existen evaluaciones
+            if(count($evaluaciones)>0)
+            {
+                //Opciones para la última evaluación
+                $options['group']=array('Materia.id');
+                $options['fields']=array('Materia.id','AVG(Resultado.correcta)*10 as Resultado__promedio');
+                $options['order'] = array('Materia.id');
+                $options['conditions']=array('User.id'=>$this->Auth->user('id'),'Evaluacion.id'=>$evaluaciones[0]['Evaluacion']['id']);
+                $ultimaEval=$this->Evaluacion->find('all',$options);
+
+                //Procesamiento de la última evaluación
+                foreach($ultimaEval as $evaluacion)
+                {
+                    $ultimosResultados['actual'][intval($evaluacion['Materia']['id'])]= $evaluacion['Resultado']['promedio'];
+                }
+
+                    $ultimosResultados['actual'] = $ultimosResultados['actual']+ $arrayMaterias;
+                    ksort($ultimosResultados['actual']);
+
+                //Opciones y procesamiento de las evaluaciones anteriores
+                $options['conditions']=array('User.id'=>$this->Auth->user('id'),'Evaluacion.id !='=>$evaluaciones[0]['Evaluacion']['id']);
+                $evalsAnteriores=$this->Evaluacion->find('all',$options);
+                foreach($evalsAnteriores as $evaluacion)
+                {
+                    $ultimosResultados['anterior'][intval($evaluacion['Materia']['id'])]= $evaluacion['Resultado']['promedio'];
+                }
+                    $ultimosResultados['anterior'] = $ultimosResultados['anterior']+ $arrayMaterias;
+                    ksort($ultimosResultados['anterior']);
+
+
+                //Procesamiento del total de evaluaciones
+                foreach($evaluaciones as $evaluacion)
+                {
+                    $date = new DateTime($evaluacion['Evaluacion']['fecha']);
+                    $promediosData['labels'][] = $date->format('d-m-Y');
+                    $promediosData['data'][] = $evaluacion['Resultado']['promedio'];
+                }
+
+                //Respuesta
+                $jsonResponse = array("avances"=>array(
+                    "labels"=>array_values($labels),
+                    "periodos"=>array(
+                        "anterior"=>array_values($ultimosResultados['anterior']),
+                        "actual"=>array_values($ultimosResultados['actual']))),
+
+                    "promedios"=>array(
+                        "labels"=>$promediosData['labels'],
+                        "data"=>$promediosData['data']
+                    )
+                );
+            }
+            else
+            {
+                $jsonResponse = array("avances"=>array(
+                    "labels"=>array_values($labels),
+                    "periodos"=>array(
+                        "anterior"=>array_values($arrayMaterias),
+                        "actual"=>array_values($arrayMaterias))),
+
+                    "promedios"=>array(
+                        "labels"=>array(),
+                        "data"=>array()
+                    )
+                );
+            }
+
+
+
+
+
+
 
             $this->set("response",$jsonResponse);
         }
@@ -176,90 +282,7 @@ class EvaluacionesController extends AppController {
 
 
 
-    /**
-     * @param $evaluaciones
-     * @return array()
-     */
 
-    public function getLastEvalsResults($evaluaciones,$numLabels)
-    {
-        $this->loadModel('Evaluacion');
-        $numRegistros = count($evaluaciones);
-        if($numRegistros>0)
-        {
-            if($numRegistros==1)
-            {
-                $tempResult= $this->Evaluacion->Resultado->find('all',array(
-                    'fields'=>array('Materia.id,SUM(Resultado.puntaje) as puntaje'),
-                    'conditions'=>array("Resultado.examen_id"=>$evaluaciones[0]['Evaluacion']['id']),
-                    'group'=>'Materia.id',
-                    'joins'=>array(
-                        array(
-                                   'table'=>'materias',
-                                   'alias'=>'Materia',
-                                   'type'=>'INNER',
-                                   'conditions'=>'Tema.id_materia = Materia.id'
-                        )
-                    ),
-
-                ));
-                $evalResults['actual']=$tempResult;
-                $evalResults['actual']= $this->filterResults($evalResults['actual'],$numLabels);
-                $evalResults['anterior']=$evalResults['actual'];
-
-            }
-            else
-            {
-                $evalResults['actual'] = $this->Evaluacion->Resultado->find('all',array(
-                    'fields'=>array('Materia.id,SUM(Resultado.puntaje) as puntaje'),
-                    'conditions'=>array("Resultado.examen_id"=>$evaluaciones[0]['Evaluacion']['id']),
-                    'group'=>'Materia.id',
-                    'joins'=>array(
-                        array(
-                            'table'=>'materias',
-                            'alias'=>'Materia',
-                            'type'=>'INNER',
-                            'conditions'=>'Tema.id_materia = Materia.id'
-                        )
-                    )
-
-
-                ));
-                $evalResults['anterior'] = $this->Evaluacion->Resultado->find('all',array(
-                    'fields'=>array('Materia.id,ROUND(AVG(Resultado.puntaje),2) as puntaje'),
-                    'conditions'=>array("Evaluacion.user_id"=>$this->Auth->user('id')),
-                    'group'=>'Materia.id',
-                    'joins'=>array(
-                        array(
-                            'table'=>'materias',
-                            'alias'=>'Materia',
-                            'type'=>'INNER',
-                            'conditions'=>'Tema.id_materia = Materia.id'
-                        )
-                    ),
-
-
-                ));
-                $evalResults['actual']= $this->filterResults($evalResults['actual'],$numLabels);
-                $evalResults['anterior']= $this->filterResults($evalResults['anterior'],$numLabels);
-            }
-
-            return $evalResults;
-        }
-        else
-        {
-            $newResults = array();
-            for($i=0;$i<$numLabels;$i++)
-            {
-                $newResults[$i]="0";
-            }
-            $evalResults['actual']=$newResults;
-            $evalResults['anterior']=$newResults;
-            return $evalResults;
-
-        }
-
-    }
 
     /**
      *
@@ -383,7 +406,7 @@ class EvaluacionesController extends AppController {
         $this->setUserName();
         $this->layout="layout-main";
         //Obtenemos el ID
-        $evalID = $_GET['id'];
+        $evalID = $this->request->query['id'];
         //Cargamos los modelos
         $this->loadModel("Evaluacion");
 
@@ -782,7 +805,7 @@ class EvaluacionesController extends AppController {
     public function setUserName()
     {
         $this->set('activeUser',$this->Auth->user('Profile')['nombre']);
-        $this->set('rol',$this->Auth->user('Role')['name']);
+        $this->set('rol',$this->Auth->user('Role')['nombre']);
     }
 
 } 

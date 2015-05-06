@@ -26,9 +26,39 @@
  */
 
 
+
+/**
+ * Our custom REST routes
+ */
+Router::parseExtensions('json','xml');
+Router::mapResources(array('api'));
+
+
+
 Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 Router::connect('/', array('controller' => 'users', 'action' => 'login'));
+
+
+
 Router::connect('/api/gencode.json', array('controller' => 'api', 'action' => 'gencode'));
+
+/*
+ * Routing del API
+ */
+
+
+Router::connect('/api/oauth/authorize', array('plugin'=>'OAuth','controller' => 'oauth', 'action' => 'authorize'));
+Router::connect('/api/oauth/token', array('plugin'=>'OAuth','controller' => 'oauth', 'action' => 'token'));
+Router::connect('/api/createOAuthClient', array('controller' => 'api', 'action' => 'createOAuthClient','ext'=>'json'));
+
+
+Router::connect('/api/user', array('controller' => 'api', 'action' => 'user','ext'=>'json'));
+Router::connect('/api/pregunta', array('controller' => 'api', 'action' => 'pregunta','ext'=>'json'));
+
+
+
+
+//
 
 
 Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
@@ -62,8 +92,3 @@ Router::connect('/getDatosAlumno', array('controller' => 'Evaluaciones', 'action
 	require CAKE . 'Config' . DS . 'routes.php';
 
 
-/**
- * Our custom REST routes
- */
-    Router::parseExtensions('json','xml');
-    Router::mapResources(array('preguntas'));

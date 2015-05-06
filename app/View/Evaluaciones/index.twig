@@ -112,19 +112,19 @@
                             {%for eval in ultimos_resultados%}
 
                                 <tr class='
-											{% if eval.promedio >= 85 %}success
-											{% elseif eval.promedio < 85 and eval.promedio >= 60 %}warning
-											{% elseif eval.promedio < 60  %}danger{%else%}
+											{% if eval.Resultado.promedio >= 85 %}success
+											{% elseif eval.Resultado.promedio < 85 and eval.Resultado.promedio >= 60 %}warning
+											{% elseif eval.Resultado.promedio < 60  %}danger{%else%}
 											{% endif %}
 											' >
-                                    <td><a href="revision?id={{ eval.id }}">{{eval.fecha}}</a>
+                                    <td><a href="revision?id={{ eval.Evaluacion.id }}">{{eval.Evaluacion.fecha}}</a>
                                     </td>
                                     <td class='tet'>
-                                        <a href='revision?id={{ eval.id }}' class='{% if eval.promedio >= 85 %}text-success
-											{% elseif eval.promedio < 85 and eval.promedio >= 60 %}text-warning
-											{% elseif eval.promedio < 60  %}text-danger{%else%}
+                                        <a href='revision?id={{ eval.Evaluacion.id }}' class='{% if eval.Resultado.promedio >= 85 %}text-success
+											{% elseif eval.Resultado.promedio < 85 and eval.Resultado.promedio >= 60 %}text-warning
+											{% elseif eval.Resultado.promedio < 60  %}text-danger{%else%}
 											{% endif %}'>
-                                            {{eval.promedio}}
+                                            {{eval.Resultado.promedio}}
                                         </a>
                                     </td>
 
